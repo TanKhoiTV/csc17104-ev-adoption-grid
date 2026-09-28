@@ -1,0 +1,34 @@
+# Line-ending and diff policy for this repository.
+# `text=auto` lets Git content-sniff, so archives and images are left untouched;
+# `eol=lf` pins working-tree endings to LF on every platform.
+
+* text=auto eol=lf
+
+# Notebooks
+*.ipynb text eol=lf
+
+# Clear outputs during development before committing with:
+# > jupyter nbconvert --clear-output --inplace notebooks/*.ipynb
+# Run all notebooks to display output with:
+# > jupyter nbconvert --execute --inplace notebooks/*.ipynb
+
+# Cell-level notebook diffs and merges instead of raw JSON. Run to activate:
+# > nbdime config-git --enable
+# Use the `--disable` flag if the `nbdime` package is removed for any reason,
+# otherwise there will be a nasty error for the missing package
+*.ipynb diff=jupyternotebook merge=jupyternotebook
+
+# Data
+# data/ is gitignored; these rules only matter if a dataset is added by mistake.
+*.csv  text eol=lf
+*.xlsx binary
+*.xls  binary
+*.pdf  binary
+
+# Sources and documents
+*.py   text eol=lf
+*.sh   text eol=lf
+*.md   text eol=lf
+*.yml  text eol=lf
+*.yaml text eol=lf
+*.json text eol=lf
