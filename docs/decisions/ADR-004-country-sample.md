@@ -43,7 +43,7 @@ Cơ sở của từng vai trò, dựa trên Bảng 1 và Bảng 2:
 - **ĐNA phát triển (Japan)** - transport share 18.4%, dữ liệu đầy đủ nhất mẫu (15 năm sạc).
 - **Đại diện EU (Germany)** - nền kinh tả lớn nhất EU trong mẫu (567.8 Mt CO₂).
 - **Benchmark phương Tây (United States)** - 36.4% transport share, 15 năm dữ liệu, và là nước
-  duy nhất có sự kiện Clean Vehicle Credits cho event study của M2 (ADR-006).
+  duy nhất có sự kiện Clean Vehicle Credits cho event study của M2b (ADR-006).
 - **Trường hợp tốt nhất (New Zealand)** - transport share cao nhất mẫu (52.7%), tức nền tảng phát
   thải lớn nhất để đo tác động của điện xe hoá.
 
@@ -96,7 +96,7 @@ Một số điều lưu ý:
 
 - **Singapore không tồn tại trong file IEA.** - Không có bất kỳ entry nào của Singapore xuất hiện. Do đó mà Singapore chỉ có thể được dùng cho M3, không dùng cho M1/M2.
 - **Series `cars` của Vietnam mỏng hơn series `2 and 3 wheelers.`** - `cars` có 5 năm rời rạc (2018, 2021-2024), `2 and 3 wheelers` có 11 năm liên tục (2014-2024) cho cả sales share và stock share.
-- **Điểm sạc của Vietnam chỉ có 2 năm (2023-2024).** - Nếu M2 sử dụng charging density làm biến hồi quy thì VN không đóng góp được gì. Thiết kế event study theo Clean Vehicle Credits của M2 không cần dữ liệu này.
+- **Điểm sạc của Vietnam chỉ có 2 năm (2023-2024).** - Nếu M2 sử dụng charging density làm biến hồi quy thì VN không đóng góp được gì. Thiết kế event study theo Clean Vehicle Credits của M2b không cần dữ liệu này.
 
 ## Alternatives Considered
 
