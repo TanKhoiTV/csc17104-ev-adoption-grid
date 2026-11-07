@@ -89,8 +89,10 @@ trong câu hỏi ML, #17 lại nói M1 phải dùng chuỗi hai bánh cho Việt
 
 - **Q2 giữ `cars`, 6 quốc gia, loại Việt Nam**, và báo cáo lý do loại (0 dòng huấn luyện sau lag) theo đúng
   kỷ luật của ADR-006 D.6.
-- **Việt Nam vào Q1** (ở dạng một quan sát trong kiểm định chéo quốc gia, dùng `2 and 3 wheelers` cho tốc độ)
-  và **vào Q4** ở đây.
+- **Việt Nam vào Q1** như một quan sát trong kiểm định chéo quốc gia. Tốc độ dùng **`cars` với hai mốc 2018
+  (0,0016%) và 2024 (17,0%)**, để biến mục tiêu của Q1 đồng nhất định nghĩa với 6 nước còn lại — nếu dùng
+  `2 and 3 wheelers` cho riêng Việt Nam thì Q1 lặp lại đúng lỗi định nghĩa mà D.5 vừa loại bỏ ở Q2.
+  `2 and 3 wheelers` chỉ dùng ở phần độ vững của Q1 và ở Q4.
 - Không còn câu nào yêu cầu Việt Nam phải có chuỗi `cars` dài.
 
 ### D.6. Độ sâu
