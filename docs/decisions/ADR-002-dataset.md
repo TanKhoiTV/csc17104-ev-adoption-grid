@@ -1,8 +1,8 @@
-# ADR-002: Dataset decision record
+# ADR-002: Chốt bộ dữ liệu
 
 ## Status
 
-Proposed
+Đề xuất
 
 ## Date
 
@@ -10,34 +10,34 @@ Proposed
 
 ## Context
 
-The project needs two kinds of data, for three modules:
+Dự án cần hai loại dữ liệu, cho ba module:
 
-- **Emissions by sector and country** — for Q1 and as the basis for selecting the country sample (ADR-004).
-- **EV data** (sales share, stock share, public charging points) — for Q2 (diffusion coverage) and Q3 (charging density → adoption).
+- **Phát thải theo sector và quốc gia** — cho Q1 và là cơ sở chọn mẫu (ADR-004).
+- **Dữ liệu xe điện** (sales share, stock share, điểm sạc công cộng) — cho Q2 (độ phủ diffusion) và Q3 (mật độ sạc → áp dụng).
 
-Constraints:
+Ràng buộc:
 
-- Must cover the **8 countries** in ADR-004.
-- Must be an **official release with a version number**, so it can be cited and reproduced.
-- **Must not be committed** to the repository: licence terms and file size (see D.3).
+- Phải phủ đủ **8 quốc gia** trong ADR-004.
+- Phải là **bản phát hành chính thức, có số phiên bản**, để trích dẫn và tái lập.
+- **Không được commit** vào repo: điều khoản giấy phép và kích thước file (xem D.3).
 
-The two files below are the primary dataset. They live in `data/` and are hidden by `data/*` in `.gitignore`.
+Hai file dưới đây là bộ dữ liệu chính. Chúng nằm trong `data/` và bị `.gitignore` che bởi `data/*`.
 
 ## Decision
 
-### D.1. EDGAR 2026 — emissions by sector
+### D.1. EDGAR 2026 — phát thải theo sector
 
-| Property | Value |
+| Thuộc tính | Giá trị |
 | --- | --- |
 | File | `data/EDGAR_2026_GHG_booklet_2026.xlsx` |
-| Size | 4,767,596 bytes |
+| Kích thước | 4.767.596 bytes |
 | SHA-256 | `BB77A0DA5735925B3A6A64BE63DADE9E71B57174D5EC6C7EFF872274DF00F88C` |
 | Sheet | `GHG_by_sector_and_country` |
-| Filter | `Substance = CO2`, year **2025** |
-| Denominator | Sum of **8 sectors**, LULUCF excluded |
-| Sector grouping | `Industry = Industrial Combustion + Processes`; `Power = Power Industry` |
+| Bộ lọc | `Substance = CO2`, năm **2025** |
+| Mẫu số | Tổng của **8 sector**, không gồm LULUCF |
+| Gộp sector | `Industry = Industrial Combustion + Processes`; `Power = Power Industry` |
 
-The eight EDGAR sector labels, verbatim as they appear in the sheet:
+Tám nhãn sector của EDGAR, verbatim như trong sheet:
 
 1. Agriculture
 2. Buildings
@@ -48,103 +48,103 @@ The eight EDGAR sector labels, verbatim as they appear in the sheet:
 7. Transport
 8. Waste
 
-`Industry` and `Power` in the ADR-004 tables are groupings of these labels; `Transport` is used as-is.
+`Industry` và `Power` trong bảng của ADR-004 là các nhóm gộp của các nhãn này; `Transport` dùng nguyên.
 
-Used for: the sector structure of Q1, and the basis for each country's role in ADR-004.
+Dùng cho: cấu trúc sector của Q1, và cơ sở cho vai trò từng quốc gia trong ADR-004.
 
-Note: year 2025 is the **Fast Track (preliminary)** release; 2024 is the final release. The sensitivity between the two must be recorded in `SPECIFICATION.md`.
+Lưu ý: năm 2025 là bản **Fast Track (sơ bộ)**; 2024 là bản cuối. Độ nhạy giữa hai năm phải được ghi trong `SPECIFICATION.md`.
 
-### D.2. IEA GEVO 2025 — EV data
+### D.2. IEA GEVO 2025 — dữ liệu xe điện
 
-| Property | Value |
+| Thuộc tính | Giá trị |
 | --- | --- |
 | File | `data/EV Data Explorer 2025.xlsx` |
-| Size | 936,334 bytes |
+| Kích thước | 936.334 bytes |
 | SHA-256 | `309C6342BB730D1B565553B6F57F6EF7A5F436D164AF81DBCC6A2DC8AB35699D` |
 | Sheet | `GEVO_EV_2025` |
-| Filter | `category = Historical`, `powertrain = EV` |
+| Bộ lọc | `category = Historical`, `powertrain = EV` |
 
-Used for: EV sales share, EV stock share, and public charging points for Q2 and Q3.
+Dùng cho: EV sales share, EV stock share và số điểm sạc công cộng của Q2 và Q3.
 
-Known limits:
+Giới hạn đã biết:
 
-- The latest historical year is **2024**, so the file has **no post-treatment observations** for the 30/9/2025 shock. Q3b uses other sources (ADR-006, D.7–D.8).
-- **Singapore does not exist** in the file, so it cannot enter Q2 or Q3 (and only contributes structure to Q1).
-- IEA rounds to **two significant figures**; for very small values (e.g. Vietnam 0.0016% in 2018) this limits the precision of confidence intervals.
-- The download is **gated behind an IEA account** ("You are either not logged in or your login session has expired… create an IEA account to download data"). A fresh clone cannot re-fetch without an account, so the hash pin in D.1/D.2 carries more weight, not less.
+- Năm lịch sử mới nhất là **2024**, nên file **không có quan sát hậu điều trị** cho cú sốc 30/9/2025. Q3b dùng nguồn khác (ADR-006, D.7–D.8).
+- **Singapore không tồn tại** trong file, nên không thể vào Q2 hay Q3 (và chỉ đóng góp cấu trúc cho Q1).
+- IEA làm tròn **hai chữ số có nghĩa**; với các giá trị rất nhỏ (ví dụ Vietnam 0.0016% năm 2018) độ chính xác này giới hạn ý nghĩa của khoảng tin cậy.
+- Việc tải file bị **gated sau tài khoản IEA** ("You are either not logged in or your login session has expired… create an IEA account to download data"). Một clone mới không tải lại được nếu không có tài khoản, nên hash pin ở D.1/D.2 càng quan trọng.
 
-### D.3. Licence and storage
+### D.3. Giấy phép và lưu trữ
 
-**EDGAR 2026.** The dataset's conditions of use state: material owned by the European Union is licensed under **CC BY 4.0**, "unless otherwise noted". The exception: the **IEA-EDGAR CO2** component (CO₂ from fossil fuel combustion) is licensed under **CC BY-NC-ND 4.0**.
+**EDGAR 2026.** Điều khoản của bộ dữ liệu ghi: tài liệu thuộc EU được cấp phép **CC BY 4.0**, "trừ khi có ghi chú khác". Ngoại lệ quan trọng: thành phần **IEA-EDGAR CO2** (CO₂ từ đốt nhiên liệu hoá thạch) được cấp phép **CC BY-NC-ND 4.0**.
 
-Since Q1 filters `Substance = CO2`, and the CO₂ from fossil fuel combustion *is* the IEA-EDGAR CO2 component, the part of the data the project actually uses is **NC-ND**:
+Vì Q1 lọc `Substance = CO2`, và CO₂ từ đốt nhiên liệu chính là thành phần IEA-EDGAR CO2, phần dữ liệu dự án thực sự dùng **thuộc NC-ND**:
 
-- **NC** — academic use only, not commercial.
-- **ND** — no redistribution of modified data.
-- **Action item:** users of IEA-EDGAR CO2 data must contact the IEA at `compliance@iea.org` for permission to use it outside the CC BY-NC-ND 4.0 terms.
+- **NC** — chỉ dùng cho mục đích học thuật, không thương mại.
+- **ND** — không được phân phối lại bản đã sửa đổi.
+- **Action item:** người dùng dữ liệu IEA-EDGAR CO2 phải liên hệ IEA tại `compliance@iea.org` để xin phép sử dụng ngoài điều khoản CC BY-NC-ND 4.0.
 
-**IEA GEVO 2025.** Licence confirmed on 2026-11-07 from the product page `https://www.iea.org/data-and-statistics/data-product/global-ev-outlook-2025` (browser fetch, saved as a local HTML record; scripted access returns a Cloudflare challenge):
+**IEA GEVO 2025.** Giấy phép xác nhận ngày 07/11/2026 từ trang sản phẩm `https://www.iea.org/data-and-statistics/data-product/global-ev-outlook-2025` (fetch bằng trình duyệt, lưu làm bản ghi HTML; scripted access trả về Cloudflare challenge):
 
-- **CC BY 4.0** — redistribution is permitted with attribution.
-- IEA-supplied citation: `IEA, Global EV Outlook 2025, IEA, Paris, https://www.iea.org/data-and-statistics/data-product/global-ev-outlook-2025, Licence: CC BY 4.0`
-- The file is the "Global EV Data File", dated 14/05/2025 on the same page.
+- **CC BY 4.0** — được phân phối lại kèm attribution.
+- Chuỗi trích dẫn IEA cung cấp: `IEA, Global EV Outlook 2025, IEA, Paris, https://www.iea.org/data-and-statistics/data-product/global-ev-outlook-2025, Licence: CC BY 4.0`
+- File là "Global EV Data File", ngày 14/05/2025 trên cùng trang.
 
-**Conclusion.** Both files stay outside git, hidden by `data/*` in `.gitignore`. The reason is now **reproducibility** (both are fetchable by URL and hash-verifiable, but neither is committed), not the GEVO licence. The NC-ND terms on the EDGAR CO₂ component are the binding constraint on *redistribution*: verbatim raw redistribution is defensible, but a redistributed `emissions_long.csv` (a filtered derivative) is not.
+**Kết luận.** Cả hai file nằm ngoài git, che bởi `data/*` trong `.gitignore`. Lý do giờ là **khả năng tái lập** (cả hai đều tải được bằng URL và kiểm hash, nhưng không được commit), không phải giấy phép GEVO. Điều khoản NC-ND của thành phần EDGAR CO₂ là ràng buộc chính đối với **phân phối lại**: phân phối lại bản thô nguyên văn là hợp lý, nhưng phân phối lại `emissions_long.csv` (một bản dẫn xuất đã lọc) thì không.
 
-### D.4. Provenance record
+### D.4. Ghi nhận nguồn gốc
 
-Because the files are not in the repository, this table is the durable record of the inputs.
+Vì file không nằm trong repo, bảng này là bản ghi nguồn gốc bền vững.
 
-| File | Source | Download date | SHA-256 (short) |
+| File | Nguồn | Ngày tải | SHA-256 (rút gọn) |
 | --- | --- | --- | --- |
-| EDGAR 2026 | EDGAR / JRC, release `EDGAR_2026_GHG` | 2026-10-19 | `BB77A0DA…` |
+| EDGAR 2026 | EDGAR / JRC, bản phát hành `EDGAR_2026_GHG` | 2026-10-19 | `BB77A0DA…` |
 | GEVO 2025 | IEA, *Global EV Outlook 2025* — Global EV Data Explorer | 2026-10-19 | `309C6342…` |
 
-Anyone cloning the repository must download the exact versions above and verify the hashes before running `prepare_data.py`.
+Ai clone repo phải tải đúng phiên bản trên và kiểm tra hash trước khi chạy `prepare_data.py`.
 
-### D.5. Version pinning
+### D.5. Ghim phiên bản
 
-- The versions used in the project are **EDGAR 2026** and **GEVO 2025**. They are not replaced in place.
-- A newer release (e.g. EDGAR 2027, GEVO 2026) requires a **new ADR** superseding this one.
-- Every result in the notebooks must state which data version it used.
+- Phiên bản dùng trong dự án là **EDGAR 2026** và **GEVO 2025**. Không thay file tại chỗ.
+- Bản mới hơn (ví dụ EDGAR 2027, GEVO 2026) phải có **ADR mới** thay thế ADR này.
+- Mọi kết quả trong notebook phải ghi phiên bản dữ liệu đã dùng.
 
-### D.6. Country-name mapping
+### D.6. Ánh xạ tên quốc gia
 
-The two files use different names. `prepare_data.py` must use an explicit mapping table; relying on name matching silently drops rows — the same class of bug that hid Singapore's absence.
+Hai file đặt tên khác nhau. `prepare_data.py` phải dùng bảng ánh xạ tường minh; nếu không sẽ âm thầm bỏ mất dòng — cùng kiểu lỗi đã che giấu việc thiếu Singapore.
 
-| Country | EDGAR name | IEA key |
+| Quốc gia | EDGAR name | IEA key |
 | --- | --- | --- |
 | Vietnam | `Viet Nam` | `Viet Nam` |
 | Thailand | `Thailand` | `Thailand` |
-| Singapore | `Singapore` | _absent_ |
+| Singapore | `Singapore` | _không có_ |
 | China | `China` | `China` |
 | Japan | `Japan` | `Japan` |
 | Germany | `Germany` | `Germany` |
 | United States | `United States` | `USA` |
 | New Zealand | `New Zealand` | `New Zealand` |
 
-### D.7. Out of scope
+### D.7. Ngoài phạm vi
 
-These sources are **not** covered by this ADR:
+Các nguồn sau **không** thuộc ADR này:
 
-- AFDC (charging and registration by state), Argonne (US monthly sales), Alliance for Automotive Innovation (quarterly sales by state), EAFO (EU monthly).
+- AFDC (sạc và đăng ký theo bang), Argonne (doanh số Mỹ theo tháng), Alliance for Automotive Innovation (doanh số theo bang–quý), EAFO (EU theo tháng).
 
-They serve Q3b and are decided in **ADR-006, D.7–D.8**. Rule: adding a new source requires recording its licence, access method, and download date; if it becomes a primary source, it needs its own ADR.
+Chúng phục vụ Q3b và được chốt trong **ADR-006, D.7–D.8**. Quy tắc: thêm một nguồn mới phải ghi rõ giấy phép, cách truy cập và ngày tải; nếu là nguồn chính thì cần ADR mới.
 
 ## Alternatives Considered
 
-- **A.1. Use OWID GEVO 2026 instead of GEVO 2025.** OWID has Singapore 2016–2025, but it mixes two IEA versions in one sample and weakens consistency. **Rejected.**
-- **A.2. Use EDGAR 2025 instead of EDGAR 2026.** The 2025 release stops at 2024, losing the 2025 year used for sector structure. **Rejected.**
-- **A.3. Commit the two xlsx files to the repository.** Violates the **ND** terms of IEA-EDGAR CO2 and adds ~5.7 MB. **Rejected.**
-- **A.4. Replace IEA with AFDC/EEA for EV data.** Does not cover all 8 countries and uses different definitions (registrations by state/country) vs IEA sales share. **Rejected.**
-- **A.5. Scrape the dashboards instead of using the released files.** Unnecessary when official, versioned, hashable files exist. **Rejected.**
+- **A.1. Dùng OWID GEVO 2026 thay GEVO 2025.** OWID có Singapore 2016–2025, nhưng sẽ trộn hai phiên bản IEA trong cùng một mẫu và làm yếu tính đồng nhất. **Loại.**
+- **A.2. Dùng EDGAR 2025 thay EDGAR 2026.** Bản 2025 dừng ở 2024, thiếu năm 2025 đang dùng cho cấu trúc sector. **Loại.**
+- **A.3. Commit hai file xlsx vào repo.** Vi phạm điều khoản **ND** của IEA-EDGAR CO2 và làm repo nặng thêm ~5,7 MB. **Loại.**
+- **A.4. Lấy dữ liệu EV từ AFDC/EEA thay IEA.** Không phủ đủ 8 quốc gia và khác định nghĩa (đăng ký theo bang/nước) so với sales share của IEA. **Loại.**
+- **A.5. Cào trực tiếp từ dashboard thay vì dùng file phát hành.** Không cần thiết khi đã có file chính thức, có phiên bản và hash. **Loại.**
 
 ## Consequences
 
-- **C.1. A clone does not include the data.** A download step plus SHA-256 verification is required; this ADR is the provenance record.
-- **C.2. The NC-ND terms restrict redistribution.** No redistribution of modified data; the project uses the data for academic analysis only.
-- **C.3. EDGAR 2025 (data year) is Fast Track (preliminary); 2024 is final.** Q1 results must include a sensitivity check on the year.
-- **C.4. IEA rounds to two significant figures.** Small values such as Vietnam's are limited in precision.
-- **C.5. Country names differ between files.** An explicit mapping table is mandatory (D.6).
-- **C.6. Singapore has no IEA data.** Q2 and Q3 run on 6 countries; Q1 runs on 7 (describing structure for 8); Q4 runs on 1.
-- **C.7. IEA GEVO terms were unverified at write time** and are now confirmed CC BY 4.0; the account-gated download remains a reproducibility constraint.
+- **C.1. Clone repo không kèm dữ liệu.** Phải có bước tải lại và kiểm tra SHA-256; ADR này là bản ghi nguồn gốc.
+- **C.2. Giấy phép NC-ND hạn chế tái sử dụng.** Không được phân phối lại bản sửa đổi; dự án chỉ dùng cho mục đích học thuật.
+- **C.3. EDGAR 2025 (năm dữ liệu) là Fast Track (sơ bộ); 2024 là bản cuối.** Kết quả Q1 phải kèm kiểm tra độ nhạy với năm.
+- **C.4. IEA làm tròn hai chữ số có nghĩa.** Các giá trị nhỏ của Vietnam bị giới hạn độ chính xác.
+- **C.5. Tên quốc gia khác nhau giữa hai file.** Bắt buộc có bảng ánh xạ (D.6).
+- **C.6. Singapore không có dữ liệu IEA.** Q2 và Q3 chạy trên 6 quốc gia; Q1 chạy trên 7 (mô tả cấu trúc cho 8); Q4 chạy trên 1.
+- **C.7. Điều khoản IEA GEVO chưa xác nhận tại thời điểm viết** và nay đã xác nhận CC BY 4.0; việc tải bị gated sau tài khoản vẫn là ràng buộc tái lập.
