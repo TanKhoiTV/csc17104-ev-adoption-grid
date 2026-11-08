@@ -12,8 +12,8 @@ Proposed
 
 The project needs two kinds of data, for three modules:
 
-- **Emissions by sector and country** — for M3 and as the basis for selecting the country sample (ADR-004).
-- **EV data** (sales share, stock share, public charging points) — for M1 (diffusion coverage) and M2 (charging density → adoption).
+- **Emissions by sector and country** — for Q1 and as the basis for selecting the country sample (ADR-004).
+- **EV data** (sales share, stock share, public charging points) — for Q2 (diffusion coverage) and Q3 (charging density → adoption).
 
 Constraints:
 
@@ -50,7 +50,7 @@ The eight EDGAR sector labels, verbatim as they appear in the sheet:
 
 `Industry` and `Power` in the ADR-004 tables are groupings of these labels; `Transport` is used as-is.
 
-Used for: the sector structure of M3, and the basis for each country's role in ADR-004.
+Used for: the sector structure of Q1, and the basis for each country's role in ADR-004.
 
 Note: year 2025 is the **Fast Track (preliminary)** release; 2024 is the final release. The sensitivity between the two must be recorded in `SPECIFICATION.md`.
 
@@ -64,12 +64,12 @@ Note: year 2025 is the **Fast Track (preliminary)** release; 2024 is the final r
 | Sheet | `GEVO_EV_2025` |
 | Filter | `category = Historical`, `powertrain = EV` |
 
-Used for: EV sales share, EV stock share, and public charging points for M1 and M2.
+Used for: EV sales share, EV stock share, and public charging points for Q2 and Q3.
 
 Known limits:
 
-- The latest historical year is **2024**, so the file has **no post-treatment observations** for the 30/9/2025 shock. M2b uses other sources (ADR-006, D.7–D.8).
-- **Singapore does not exist** in the file, so M1 and M2 run on 7 countries.
+- The latest historical year is **2024**, so the file has **no post-treatment observations** for the 30/9/2025 shock. Q3b uses other sources (ADR-006, D.7–D.8).
+- **Singapore does not exist** in the file, so it cannot enter Q2 or Q3 (and only contributes structure to Q1).
 - IEA rounds to **two significant figures**; for very small values (e.g. Vietnam 0.0016% in 2018) this limits the precision of confidence intervals.
 - The download is **gated behind an IEA account** ("You are either not logged in or your login session has expired… create an IEA account to download data"). A fresh clone cannot re-fetch without an account, so the hash pin in D.1/D.2 carries more weight, not less.
 
@@ -77,7 +77,7 @@ Known limits:
 
 **EDGAR 2026.** The dataset's conditions of use state: material owned by the European Union is licensed under **CC BY 4.0**, "unless otherwise noted". The exception: the **IEA-EDGAR CO2** component (CO₂ from fossil fuel combustion) is licensed under **CC BY-NC-ND 4.0**.
 
-Since M3 filters `Substance = CO2`, and the CO₂ from fossil fuel combustion *is* the IEA-EDGAR CO2 component, the part of the data the project actually uses is **NC-ND**:
+Since Q1 filters `Substance = CO2`, and the CO₂ from fossil fuel combustion *is* the IEA-EDGAR CO2 component, the part of the data the project actually uses is **NC-ND**:
 
 - **NC** — academic use only, not commercial.
 - **ND** — no redistribution of modified data.
@@ -129,7 +129,7 @@ These sources are **not** covered by this ADR:
 
 - AFDC (charging and registration by state), Argonne (US monthly sales), Alliance for Automotive Innovation (quarterly sales by state), EAFO (EU monthly).
 
-They serve M2b and are decided in **ADR-006, D.7–D.8**. Rule: adding a new source requires recording its licence, access method, and download date; if it becomes a primary source, it needs its own ADR.
+They serve Q3b and are decided in **ADR-006, D.7–D.8**. Rule: adding a new source requires recording its licence, access method, and download date; if it becomes a primary source, it needs its own ADR.
 
 ## Alternatives Considered
 
@@ -143,8 +143,8 @@ They serve M2b and are decided in **ADR-006, D.7–D.8**. Rule: adding a new sou
 
 - **C.1. A clone does not include the data.** A download step plus SHA-256 verification is required; this ADR is the provenance record.
 - **C.2. The NC-ND terms restrict redistribution.** No redistribution of modified data; the project uses the data for academic analysis only.
-- **C.3. EDGAR 2025 (data year) is Fast Track (preliminary); 2024 is final.** M3 results must include a sensitivity check on the year.
+- **C.3. EDGAR 2025 (data year) is Fast Track (preliminary); 2024 is final.** Q1 results must include a sensitivity check on the year.
 - **C.4. IEA rounds to two significant figures.** Small values such as Vietnam's are limited in precision.
 - **C.5. Country names differ between files.** An explicit mapping table is mandatory (D.6).
-- **C.6. Singapore has no IEA data.** M1 and M2 run on 7 countries; M3 on 8.
+- **C.6. Singapore has no IEA data.** Q2 and Q3 run on 6 countries; Q1 runs on 7 (describing structure for 8); Q4 runs on 1.
 - **C.7. IEA GEVO terms were unverified at write time** and are now confirmed CC BY 4.0; the account-gated download remains a reproducibility constraint.
