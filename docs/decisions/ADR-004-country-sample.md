@@ -10,10 +10,10 @@
 
 ## Context
 
-- Vì sao lại chọn ra một số quốc gia làm mẫu: M1 khớp mô hình diffusion cho mỗi quốc gia; M2 so sánh giữa các quốc gia; M3 so sánh quá trình chuyển đổi sang xe điện với chính lượng phát thải của quốc gia đó. (Nay là Q1, Q2, Q3 theo đánh số lại.)
+- Vì sao lại chọn ra một số quốc gia làm mẫu: Q1 (trước đây M3) so sánh quá trình chuyển đổi sang xe điện với chính lượng phát thải của quốc gia đó; Q2 (trước đây M1) khớp mô hình diffusion cho mỗi quốc gia; Q3 (trước đây M2) so sánh giữa các quốc gia. (Đánh số lại theo thứ tự tự sự.)
 - Các mẫu cần được cố định hoàn toàn trước file `SPECIFICATION.md`, để việc chọn quốc gia không dựa trên kết quả thu được.
 - Cơ sở:
-    - `EDGAR_2026_GHG_booklet_2026.xlsx` cho cấu trúc sector (cơ sở tính tỉ lệ transport của M3 và vai trò từng nước)
+    - `EDGAR_2026_GHG_booklet_2026.xlsx` cho cấu trúc sector (cơ sở tính tỉ lệ transport của Q1 và vai trò từng nước)
     - `EV Data Explorer 2025.xlsx` cho chuyển đổi EV và sạc năng lượng.
 
 ## Decision
