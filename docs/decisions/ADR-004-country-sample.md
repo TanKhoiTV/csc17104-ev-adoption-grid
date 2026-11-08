@@ -139,7 +139,7 @@ The eight countries are selected for **analytical role**, not for best data. Of 
 
 ## Consequences
 
-- **Sample size changes with every module.** M1 and M2 run on 7 countries, M3 on all 8. The sample size must be stated explicitly in the spec or notebook.
+- **Sample size changes with every module.** M1 and M2 run on 6 countries, M3 on all 8. The reason is per-question data coverage, not post-hoc selection; the sample size must be stated explicitly in the spec or notebook.
 - **Vietnam's data is thin in 2–3 of its modules.** The `cars` series has 5 scattered years, which is thin for M1; charging data covers only 2 years, so Vietnam contributes little to M2. But `2 and 3 wheelers` is rich — 11 continuous years — and is the basis for the two-wheeler policy. If M1 covers only cars, Vietnam may be excluded from results; that decision belongs in the spec.
 - **Tables use EDGAR 2025 data from the EDGAR 2026 release (Fast Track); 2024 is the final release.** New Zealand's transport share shifts **2.6 percentage points** between the two years. The spec must state which year is primary and which is the sensitivity check.
 - **IEA rounds to two significant figures.** For small values such as Vietnam's (0.0016% in 2018, 0.041% in 2021), this limits the precision of bootstrap CIs, so M1's comparison threshold must account for the rounding floor.
