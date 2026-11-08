@@ -10,10 +10,10 @@ Proposed
 
 ## Context
 
-- Why pick a country sample at all: M1 fits a diffusion model per country; M2 compares across countries; M3 compares the EV transition against each country's own emissions structure.
+- Why pick a country sample at all: Q2 fits a diffusion model per country; Q3 compares across countries; Q1 compares the EV transition against each country's own emissions structure.
 - The sample must be frozen completely before `SPECIFICATION.md` is written, so country selection is never justified by results.
 - Basis:
-    - `EDGAR_2026_GHG_booklet_2026.xlsx` for sector structure (basis for M3 sector share and each country's role)
+    - `EDGAR_2026_GHG_booklet_2026.xlsx` for sector structure (basis for Q1 sector share and each country's role)
     - `EV Data Explorer 2025.xlsx` for EV transition and charging coverage.
 
 ## Decision
@@ -39,7 +39,7 @@ Rationale for each role, from the tables below:
 - **Irony case (China)** — lowest transport share in the sample (8.3%) yet the largest emitter (13,057 Mt) and the strongest transition pressure. "Irony" refers to the ratio relative to scale, not to the size of the sector.
 - **Developed East Asia (Japan)** — transport share 18.4%, fullest coverage in the sample (15 years of charging).
 - **EU representative (Germany)** — largest EU economy in the sample (567.8 Mt CO₂).
-- **Western benchmark (United States)** — 36.4% transport share, 15 years of data, and the only country with the Clean Vehicle Credits event for M2b (ADR-006).
+- **Western benchmark (United States)** — 36.4% transport share, 15 years of data, and the only country with the Clean Vehicle Credits event for Q3b (ADR-006).
 - **Best case (New Zealand)** — highest transport share in the sample (52.7%), i.e. the largest emissions base against which to measure the effect of electrification.
 
 ### Sector structure (EDGAR)
@@ -84,9 +84,9 @@ Source: `data/EV Data Explorer 2025.xlsx`, sheet `GEVO_EV_2025`, `category = His
 
 Notes:
 
-- **Singapore does not exist in the IEA file.** No entry for Singapore appears anywhere in it, so Singapore can only be used for M3, not M1 or M2.
+- **Singapore does not exist in the IEA file.** No entry for Singapore appears anywhere in it, so Singapore can only be used for Q1, not Q2 or Q3.
 - **Vietnam's `cars` series is thinner than its `2 and 3 wheelers` series.** `cars` has 5 scattered years (2018, 2021–2024); `2 and 3 wheelers` has 11 continuous years (2014–2024) for both sales share and stock share.
-- **Vietnam has only 2 years of charging data (2023–2024).** If M2 uses charging density as a regressor, Vietnam cannot contribute. The M2b event study around the Clean Vehicle Credits does not need this data.
+- **Vietnam has only 2 years of charging data (2023–2024).** If Q3 uses charging density as a regressor, Vietnam cannot contribute. The Q3b event study around the Clean Vehicle Credits does not need this data.
 
 ## Alternatives Considered
 
@@ -104,11 +104,11 @@ Of the 54 countries in the IEA file, only **29** satisfy three minimum condition
 
 ### A.2. Singapore — why it stays in the sample despite having no IEA data
 
-Singapore is the alternative with the largest impact, since it is the only country in the sample that cannot enter M1 or M2.
+Singapore is the alternative with the largest impact, since it is the only country in the sample that cannot enter Q2 or Q3. It is described in Q1's sector table, but it cannot enter Q1's association, Q2, or Q3, because it has no IEA rows at all.
 
 | Option | Assessment |
 | --- | --- |
-| **Keep Singapore, use for M3 only (chosen)** | M3 only needs EDGAR, which Singapore has. Keeps the "affluent ASEAN" role and the low end of the transport-share range (10.0%). Trade-off: no contribution to M1 or M2. |
+| **Keep Singapore, use for Q1 only (chosen)** | Q1 only needs EDGAR, which Singapore has. Keeps the "affluent ASEAN" role and the low end of the transport-share range (10.0%). Trade-off: no contribution to Q2 or Q3. |
 | Replace with Malaysia | Only 4 years of charging (A.1); `2 and 3 wheelers` very weak (0.64% in 2024), losing the contrast with Vietnam (9.4%). |
 | Replace with Indonesia | `cars` has gaps; stock share only from 2019 (A.1). |
 | Drop Singapore, keep 7 countries | Loses the "affluent ASEAN" role and the low end of the transport-share range; the sample tilts entirely toward high transport share. |
@@ -124,7 +124,7 @@ The eight countries are selected for **analytical role**, not for best data. Of 
 | South Korea (16.6) | Duplicate the "developed East Asia" position of Japan. |
 | Netherlands (19.4), Poland (25.1), Belgium (27.1), France (43.6), Italy (36.2), Spain (41.3), UK (36.7), Sweden (43.4), Denmark (43.0), Finland (30.6), Greece (36.0) | Duplicate the "EU representative" position of Germany. |
 | Canada (28.9), Mexico (30.0), Australia (27.0), Chile (36.6) | Duplicate the "Western benchmark" position of the United States. |
-| Norway (30.2) | 92% of new cars sold were electric in 2024 (IEA file), but power is only **4.1%** of CO₂ — electricity is already clean, so electrification has little M3 leverage. Kept as a qualitative comparison. |
+| Norway (30.2) | 92% of new cars sold were electric in 2024 (IEA file), but power is only **4.1%** of CO₂ — electricity is already clean, so electrification has little Q1 leverage. Kept as a qualitative comparison. |
 | Turkey (21.3) | Sits between East Asia and ASEAN; matches no role. |
 
 ### A.4. Other sampling rules considered
@@ -132,16 +132,16 @@ The eight countries are selected for **analytical role**, not for best data. Of 
 | Rule | Why not used |
 | --- | --- |
 | Random draw from the 29 eligible | Does not guarantee Vietnam (the baseline case) or coverage of the transport-share range. With n = 8, allocation is uncontrolled. |
-| By emissions rank | Sample of large countries: dilutes the CO₂ coefficient, and M3 cannot distinguish "small vs large". Also excludes New Zealand (29.2 Mt) — losing the highest transport share. |
-| All 29 eligible | Fitting diffusion + 10,000 bootstrap replicates for 29 countries is 29 curves; M3 needs per-country sector structure. n = 8 is the practical limit of the method. |
+| By emissions rank | Sample of large countries: dilutes the CO₂ coefficient, and Q1 cannot distinguish "small vs large". Also excludes New Zealand (29.2 Mt) — losing the highest transport share. |
+| All 29 eligible | Fitting diffusion + 10,000 bootstrap replicates for 29 countries is 29 curves; Q1 needs per-country sector structure. n = 8 is the practical limit of the method. |
 | By income level | All 8 would be middle-to-high income, excluding Vietnam — the whole point of the policy question. |
 | All 10 ASEAN | 5 countries (Philippines, Cambodia, Laos, Myanmar, Brunei) have no EV data at all; Singapore is absent from the IEA file. Too much missing data to sample on principle. |
 
 ## Consequences
 
-- **Sample size changes with every module.** M1 and M2 run on 6 countries, M3 on all 8. The reason is per-question data coverage, not post-hoc selection; the sample size must be stated explicitly in the spec or notebook.
-- **Vietnam's data is thin in 2–3 of its modules.** The `cars` series has 5 scattered years, which is thin for M1; charging data covers only 2 years, so Vietnam contributes little to M2. But `2 and 3 wheelers` is rich — 11 continuous years — and is the basis for the two-wheeler policy. If M1 covers only cars, Vietnam may be excluded from results; that decision belongs in the spec.
+- **Sample size changes with every module.** Q2 and Q3 run on 6 countries, Q1 on all 8. The reason is per-question data coverage, not post-hoc selection; the sample size must be stated explicitly in the spec or notebook.
+- **Vietnam's data is thin in 2–3 of its modules.** The `cars` series has 5 scattered years, which is thin for Q2; charging data covers only 2 years, so Vietnam contributes little to Q3. But `2 and 3 wheelers` is rich — 11 continuous years — and is the basis for the two-wheeler policy. If Q2 covers only cars, Vietnam may be excluded from results; that decision belongs in the spec.
 - **Tables use EDGAR 2025 data from the EDGAR 2026 release (Fast Track); 2024 is the final release.** New Zealand's transport share shifts **2.6 percentage points** between the two years. The spec must state which year is primary and which is the sensitivity check.
-- **IEA rounds to two significant figures.** For small values such as Vietnam's (0.0016% in 2018, 0.041% in 2021), this limits the precision of bootstrap CIs, so M1's comparison threshold must account for the rounding floor.
+- **IEA rounds to two significant figures.** For small values such as Vietnam's (0.0016% in 2018, 0.041% in 2021), this limits the precision of bootstrap CIs, so Q2's comparison threshold must account for the rounding floor.
 - **Country names differ between files:** EDGAR uses `Viet Nam` / `United States` / `South Korea` / `Türkiye`; IEA uses `Viet Nam` / `USA` / `Korea` / `Turkiye`. `prepare_data.py` needs an explicit mapping table, otherwise rows are silently dropped — the same class of bug that hid Singapore's absence.
 - **Both xlsx files are gitignored**, so they are not committed. The tables in this ADR are the durable record of the numbers. Changing the sample later requires a new ADR superseding this one, not an in-place edit.
