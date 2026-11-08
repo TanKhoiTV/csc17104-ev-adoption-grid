@@ -10,50 +10,45 @@ Proposed
 
 ## Context
 
-- Vì sao lại chọn ra một số quốc gia làm mẫu: M1 khớp mô hình diffusion cho mỗi quốc gia; M2 so sánh giữa các quốc gia;
-M3 so sánh quá trình chuyển đổi sang xe điện với chính lượng phát thải của quốc gia đó.
-- Các mẫu cần được cố định hoàn toàn trước file `SPECIFICATION.md`, để việc chọn quốc gia không dựa trên kết quả thu được.
-- Cơ sở:
-    - `EDGAR_2026_GHG_booklet_2026.xlsx` cho cấu trúc sector (?)
-    - `EV Data Explorer 2025.xlsx` cho chuyển đổi EV và sạc năng lượng.
+- Why pick a country sample at all: M1 fits a diffusion model per country; M2 compares across countries; M3 compares the EV transition against each country's own emissions structure.
+- The sample must be frozen completely before `SPECIFICATION.md` is written, so country selection is never justified by results.
+- Basis:
+    - `EDGAR_2026_GHG_booklet_2026.xlsx` for sector structure (basis for M3 sector share and each country's role)
+    - `EV Data Explorer 2025.xlsx` for EV transition and charging coverage.
 
 ## Decision
 
-### Các quốc gia được lựa chọn
+### Countries selected
 
-| # | Quốc gia | Vai trò | EDGAR name | IEA key |
+| # | Country | Role | EDGAR name | IEA key |
 | --- | --- | --- | --- | --- |
-| 1 | Vietnam | Cơ sở | Viet Nam | Viet Nam |
-| 2 | Thailand | Quốc gia ĐNA gần nhất để so sánh | Thailand | Thailand |
-| 3 | Singapore | Quốc gia ĐNA giàu có | Singapore | _absent_ |
-| 4 | China | Trường hợp irony | China | China |
-| 5 | Japan | Quốc gia phát triển ở ĐNA | Japan | Japan |
-| 6 | Germany | Đại diện EU | Germany | Germany |
-| 7 | United States | Benchmark phương Tây | United States | USA |
-| 8 | New Zealand | Trường hợp tốt nhất | New Zealand | New Zealand |
+| 1 | Vietnam | Baseline | Viet Nam | Viet Nam |
+| 2 | Thailand | Closest ASEAN comparator | Thailand | Thailand |
+| 3 | Singapore | Affluent ASEAN | Singapore | _absent_ |
+| 4 | China | Irony case | China | China |
+| 5 | Japan | Developed East Asia | Japan | Japan |
+| 6 | Germany | EU representative | Germany | Germany |
+| 7 | United States | Western benchmark | United States | USA |
+| 8 | New Zealand | Best case | New Zealand | New Zealand |
 
-Cơ sở của từng vai trò, dựa trên Bảng 1 và Bảng 2:
+Rationale for each role, from the tables below:
 
-- **Cơ sở (Vietnam)** - nước gốc của câu hỏi chính sách; `2 and 3 wheelers` có 11 năm liên tục.
-- **ĐNA gần nhất để so sánh (Thailand)** - cùng khu vực, nhưng transport share 30.3% so với 13.1%
-  của Việt Nam: chênh 2.3 lần, và dữ liệu đầy đủ 15 năm.
-- **ĐNA giàu có (Singapore)** - transport share 10.0%, thấp thứ hai trong mẫu; tương phản với Việt Nam.
-- **Trường hợp irony (China)** - transport share thấp nhất mẫu (8.3%) nhưng là nước phát thải lớn
-  nhất (13,057 Mt) và áp lực chuyển đổi lớn nhất. Chỉ "irony" ở chỗ tỉ lệ so với quy mô.
-- **ĐNA phát triển (Japan)** - transport share 18.4%, dữ liệu đầy đủ nhất mẫu (15 năm sạc).
-- **Đại diện EU (Germany)** - nền kinh tả lớn nhất EU trong mẫu (567.8 Mt CO₂).
-- **Benchmark phương Tây (United States)** - 36.4% transport share, 15 năm dữ liệu, và là nước
-  duy nhất có sự kiện Clean Vehicle Credits cho event study của M2b (ADR-006).
-- **Trường hợp tốt nhất (New Zealand)** - transport share cao nhất mẫu (52.7%), tức nền tảng phát
-  thải lớn nhất để đo tác động của điện xe hoá.
+- **Baseline (Vietnam)** — the country behind the policy question; `2 and 3 wheelers` has 11 continuous years.
+- **Closest ASEAN comparator (Thailand)** — same region, but transport share 30.3% vs Vietnam's 13.1% (2.3x), with full 15-year coverage.
+- **Affluent ASEAN (Singapore)** — transport share 10.0%, second lowest in the sample; contrast with Vietnam.
+- **Irony case (China)** — lowest transport share in the sample (8.3%) yet the largest emitter (13,057 Mt) and the strongest transition pressure. "Irony" refers to the ratio relative to scale, not to the size of the sector.
+- **Developed East Asia (Japan)** — transport share 18.4%, fullest coverage in the sample (15 years of charging).
+- **EU representative (Germany)** — largest EU economy in the sample (567.8 Mt CO₂).
+- **Western benchmark (United States)** — 36.4% transport share, 15 years of data, and the only country with the Clean Vehicle Credits event for M2b (ADR-006).
+- **Best case (New Zealand)** — highest transport share in the sample (52.7%), i.e. the largest emissions base against which to measure the effect of electrification.
 
-### Cấu trúc phát thải theo sector (EDGAR)
+### Sector structure (EDGAR)
 
-Cách tính: chỉ lọc `Substance = CO2`, **năm 2025**; mẫu số là tổng của cả 8 sector (không gồm LULUCF); `Industry = Industrial Combustion + Processes`; `Power = Power Industry`.
+Method: filter `Substance = CO2`, **year 2025**; denominator is the sum of all 8 sectors (LULUCF excluded); `Industry = Industrial Combustion + Processes`; `Power = Power Industry`.
 
-Cột "Tổng CO₂" là tổng 8 sector, đơn vị Mt.
+"Total CO₂" is the sum of the 8 sectors, in Mt.
 
-| Quốc gia | Transport % | Industry % | Power % | Tổng CO₂ 2025 (Mt) |
+| Country | Transport % | Industry % | Power % | Total CO₂ 2025 (Mt) |
 | --- | --- | --- | --- | --- |
 | Vietnam | 13.1 | 35.6 | 46.0 | 387.0 |
 | Thailand | 30.3 | 27.3 | 30.6 | 266.9 |
@@ -64,98 +59,89 @@ Cột "Tổng CO₂" là tổng 8 sector, đơn vị Mt.
 | United States | 36.4 | 13.0 | 33.0 | 4,739.1 |
 | New Zealand | 52.7 | 21.2 | 11.9 | 29.2 |
 
-Nguồn: `data/EDGAR_2026_GHG_booklet_2026.xlsx`, sheet `GHG_by_sector_and_country`.
+Source: `data/EDGAR_2026_GHG_booklet_2026.xlsx`, sheet `GHG_by_sector_and_country`.
 
-> **Lưu ý về vai trò của China và New Zealand.** Câu "New Zealand và China bracket the range
-> (52.7% và 8.3%)" trong pre-registration chỉ đúng **trong phạm vi pool hợp lệ** (29 quốc gia
-> ở A.1), không đúng trên toàn bộ các nước có dữ liệu: nới tiêu chí điểm sạc thì Costa Rica
-> (66.8%) vượt New Zealand, còn ở ngưỡng ≥ 12 năm điểm sạc thì China rơi khỏi pool. Trên toàn
-> bộ 171 nước có phát thải đáng kể, 16 nước có transport share cao hơn New Zealand. Vì vậy
-> `SPECIFICATION.md` phải ghi rõ đây là khoảng bao phủ **của pool hợp lệ**, không phải toàn cầu.
+> **Note on China and New Zealand.** The claim that "New Zealand and China bracket the range (52.7% and 8.3%)" from the pre-registration holds only **within the eligible pool** (29 countries from A.1), not across all countries with data: widening the charging-data threshold puts Costa Rica (66.8%) above New Zealand, and at a threshold of ≥ 12 years of charging data China drops out of the pool. Across all 171 countries with substantial emissions, 16 have a transport share higher than New Zealand's. `SPECIFICATION.md` must state that this is the **eligible-pool** range, not a global one.
 
-### Độ phủ dữ liệu EV (IEA)
+### EV data coverage (IEA)
 
-"Năm (n)" là các năm có dữ liệu liên tục; nếu có lỗ hổng thì ghi rõ.
+"Years (n)" counts years with continuous data; gaps are stated explicitly.
 
-Cột "Điểm sạc 2024" là tổng `Publicly available fast` + `Publicly available slow`.
+"Charging 2024" is `Publicly available fast` + `Publicly available slow`.
 
-| Quốc gia | EV sales share (cars) | EV stock share (cars) | Điểm sạc công cộng | Điểm sạc 2024 | Ghi chú |
+| Country | EV sales share (cars) | EV stock share (cars) | Public charging | Charging 2024 | Note |
 | --- | --- | --- | --- | --- | --- |
-| Vietnam | 2018, 2021–2024 (5) | 2018–2024 (7) | 2023–2024 (2) | 6,100 | thiếu 2019–2020; sạc chỉ 2 năm |
-| Thailand | 2010–2024 (15) | 2010–2024 (15) | 2017–2024 (8) | 13,400 | đầy đủ |
-| Singapore | — | — | — | — | **không có trong file** |
-| China | 2010–2024 (15) | 2010–2024 (15) | 2014–2024 (11) | 3,500,000 | đầy đủ |
-| Japan | 2010–2024 (15) | 2010–2024 (15) | 2010–2024 (15) | 34,000 | đầy đủ |
-| Germany | 2010–2024 (15) | 2010–2024 (15) | 2012–2024 (13) | 157,000 | đầy đủ |
-| United States | 2010–2024 (15) | 2010–2024 (15) | 2010–2024 (15) | 193,000 | đầy đủ |
-| New Zealand | 2010–2024 (15) | 2010–2024 (15) | 2017–2024 (8) | 1,440 | đầy đủ |
+| Vietnam | 2018, 2021–2024 (5) | 2018–2024 (7) | 2023–2024 (2) | 6,100 | missing 2019–2020; charging only 2 years |
+| Thailand | 2010–2024 (15) | 2010–2024 (15) | 2017–2024 (8) | 13,400 | complete |
+| Singapore | — | — | — | — | **absent from the file** |
+| China | 2010–2024 (15) | 2010–2024 (15) | 2014–2024 (11) | 3,500,000 | complete |
+| Japan | 2010–2024 (15) | 2010–2024 (15) | 2010–2024 (15) | 34,000 | complete |
+| Germany | 2010–2024 (15) | 2010–2024 (15) | 2012–2024 (13) | 157,000 | complete |
+| United States | 2010–2024 (15) | 2010–2024 (15) | 2010–2024 (15) | 193,000 | complete |
+| New Zealand | 2010–2024 (15) | 2010–2024 (15) | 2017–2024 (8) | 1,440 | complete |
 
-Nguồn: `data/EV Data Explorer 2025.xlsx`, sheet `GEVO_EV_2025`, `category = Historical`, `powertrain = EV`.
+Source: `data/EV Data Explorer 2025.xlsx`, sheet `GEVO_EV_2025`, `category = Historical`, `powertrain = EV`.
 
-Một số điều lưu ý:
+Notes:
 
-- **Singapore không tồn tại trong file IEA.** - Không có bất kỳ entry nào của Singapore xuất hiện. Do đó mà Singapore chỉ có thể được dùng cho M3, không dùng cho M1/M2.
-- **Series `cars` của Vietnam mỏng hơn series `2 and 3 wheelers.`** - `cars` có 5 năm rời rạc (2018, 2021-2024), `2 and 3 wheelers` có 11 năm liên tục (2014-2024) cho cả sales share và stock share.
-- **Điểm sạc của Vietnam chỉ có 2 năm (2023-2024).** - Nếu M2 sử dụng charging density làm biến hồi quy thì VN không đóng góp được gì. Thiết kế event study theo Clean Vehicle Credits của M2b không cần dữ liệu này.
+- **Singapore does not exist in the IEA file.** No entry for Singapore appears anywhere in it, so Singapore can only be used for M3, not M1 or M2.
+- **Vietnam's `cars` series is thinner than its `2 and 3 wheelers` series.** `cars` has 5 scattered years (2018, 2021–2024); `2 and 3 wheelers` has 11 continuous years (2014–2024) for both sales share and stock share.
+- **Vietnam has only 2 years of charging data (2023–2024).** If M2 uses charging density as a regressor, Vietnam cannot contribute. The M2b event study around the Clean Vehicle Credits does not need this data.
 
 ## Alternatives Considered
 
-Chỉ những phương án thay đổi mẫu nghiên cứu hoặc thay đổi kết luận mới được liệt kê.
+Only alternatives that change the sample or its conclusion are listed.
 
-### A.1. Ngưỡng dữ liệu và pool hợp lệ
+### A.1. Data threshold and the eligible pool
 
-Trong 54 quốc gia có trong file IEA, chỉ **29** thoả ba điều kiện tối thiểu: sales share và
-stock share (cars) **liên tục**, và **≥ 8 năm** có điểm sạc công cộng. 25 quốc gia còn lại bị
-loại vì lý do kỹ thuật, không phải vì vai trò phân tích:
+Of the 54 countries in the IEA file, only **29** satisfy three minimum conditions: continuous `cars` sales share and stock share, and **≥ 8 years** of public charging data. The other 25 are excluded on technical grounds, not on analytical role:
 
-| Lý do loại | Quốc gia bị loại |
+| Exclusion reason | Countries excluded |
 | --- | --- |
-| Không có stock share (cars) | Bulgaria, Croatia, Cyprus, Czech Republic, Estonia, Hungary, Ireland, Latvia, Lithuania, Luxembourg, Romania, Seychelles, Slovakia, Slovenia |
-| Có lỗ hổng năm (sales share) | Indonesia, Lithuania, Russia, **Viet Nam** |
-| Điểm sạc < 8 năm | Austria (6), Brazil (7), Colombia (4), Costa Rica (4), Indonesia (4), Israel (3), Jordan (4), Malaysia (4), Russia (4), Uzbekistan (0), **Viet Nam (2)** |
+| No stock share (cars) | Bulgaria, Croatia, Cyprus, Czech Republic, Estonia, Hungary, Ireland, Latvia, Lithuania, Luxembourg, Romania, Seychelles, Slovakia, Slovenia |
+| Year gaps (sales share) | Indonesia, Lithuania, Russia, **Viet Nam** |
+| Charging < 8 years | Austria (6), Brazil (7), Colombia (4), Costa Rica (4), Indonesia (4), Israel (3), Jordan (4), Malaysia (4), Russia (4), Uzbekistan (0), **Viet Nam (2)** |
 
-### A.2. Singapore — vì sao vẫn giữ trong mẫu dù không có dữ liệu IEA
+### A.2. Singapore — why it stays in the sample despite having no IEA data
 
-Đây là phương án thay thế có ảnh hưởng lớn nhất, vì Singapore là quốc gia duy nhất trong mẫu
-không thể tham gia M1/M2.
+Singapore is the alternative with the largest impact, since it is the only country in the sample that cannot enter M1 or M2.
 
-| Phương án | Đánh giá |
+| Option | Assessment |
 | --- | --- |
-| **Giữ Singapore, dùng cho M3** (đã chọn) | M3 chỉ cần EDGAR — Singapore có đủ. Giữ được vai trò "ĐNA giàu có" và transport share thấp (10.0%). Đánh đổi: không đóng góp cho M1/M2. |
-| Thay bằng Malaysia | Chỉ 4 năm điểm sạc (A.1); `2 and 3 wheelers` rất yếu (0.64% năm 2024), mất đối trọng với Việt Nam (9.4%). |
-| Thay bằng Indonesia | `cars` bị lỗ hổng, stock share chỉ từ 2019 (A.1). |
-| Bỏ Singapore, giữ 7 nước | Mất vai trò "ĐNA giàu có" và đầu dưới của dải transport share; mẫu nghiêng hẳn về nước có transport share cao. |
-| Lấy từ bản IEA mới hơn | OWID (GEVO 2026) có Singapore 2016–2025, nhưng mẫu sẽ trộn hai phiên bản — làm yếu tính đồng nhất. **Không chọn.** |
+| **Keep Singapore, use for M3 only (chosen)** | M3 only needs EDGAR, which Singapore has. Keeps the "affluent ASEAN" role and the low end of the transport-share range (10.0%). Trade-off: no contribution to M1 or M2. |
+| Replace with Malaysia | Only 4 years of charging (A.1); `2 and 3 wheelers` very weak (0.64% in 2024), losing the contrast with Vietnam (9.4%). |
+| Replace with Indonesia | `cars` has gaps; stock share only from 2019 (A.1). |
+| Drop Singapore, keep 7 countries | Loses the "affluent ASEAN" role and the low end of the transport-share range; the sample tilts entirely toward high transport share. |
+| Pull from a newer IEA release | OWID (GEVO 2026) has Singapore 2016–2025, but that mixes two versions — weakens consistency. **Not chosen.** |
 
-### A.3. Các quốc gia trong pool hợp lệ nhưng không được chọn
+### A.3. Countries in the eligible pool that were not selected
 
-Tám quốc gia được chọn không phải vì có dữ liệu tốt nhất, mà vì **vai trò phân tích**.
-21 quốc gia còn lại trong pool bị loại vì lý do nội tại:
+The eight countries are selected for **analytical role**, not for best data. Of the eight, only six (Thailand, China, Japan, Germany, United States, New Zealand) are members of the 29-country eligible pool; Vietnam and Singapore are chosen **outside** the pool (Vietnam as the baseline despite thin data, Singapore for its role — see A.2). Hence 29 − 6 = 23 pool countries are not selected; the table below lists the 20 most representative.
 
-| Quốc gia (transport % CO₂) | Vì sao không chọn |
+| Country (transport % of CO₂) | Why not selected |
 | --- | --- |
-| India (11.5), South Africa (11.7) | Trùng vị trí "transport share thấp" của China. |
-| South Korea (16.6) | Trùng vị trí "ĐNA phát triển" của Nhật Bản. |
-| Netherlands (19.4), Poland (25.1), Belgium (27.1), France (43.6), Italy (36.2), Spain (41.3), UK (36.7), Sweden (43.4), Denmark (43.0), Finland (30.6), Greece (36.0) | Trùng vị trí "đại diện EU" của Đức. |
-| Canada (28.9), Mexico (30.0), Australia (27.0), Chile (36.6) | Trùng vị trí "benchmark phương Tây" của Hoa Kỳ. |
-| Norway (30.2) | 92% xe mới bán điện năm 2024 (file IEA), nhưng power chỉ chiếm **4.1%** CO₂ — điện đã sạch nên điện xe hoá ít tác động, làm M3 mất ý nghĩa. Giữ làm so sánh định tính. |
-| Turkey (21.3) | Nằm giữa Đông Á và ĐNA, không khớp vai trò nào. |
+| India (11.5), South Africa (11.7) | Duplicate the "low transport share" position of China. |
+| South Korea (16.6) | Duplicate the "developed East Asia" position of Japan. |
+| Netherlands (19.4), Poland (25.1), Belgium (27.1), France (43.6), Italy (36.2), Spain (41.3), UK (36.7), Sweden (43.4), Denmark (43.0), Finland (30.6), Greece (36.0) | Duplicate the "EU representative" position of Germany. |
+| Canada (28.9), Mexico (30.0), Australia (27.0), Chile (36.6) | Duplicate the "Western benchmark" position of the United States. |
+| Norway (30.2) | 92% of new cars sold were electric in 2024 (IEA file), but power is only **4.1%** of CO₂ — electricity is already clean, so electrification has little M3 leverage. Kept as a qualitative comparison. |
+| Turkey (21.3) | Sits between East Asia and ASEAN; matches no role. |
 
-### A.4. Các quy tắc chọn mẫu khác đã cân nhắc
+### A.4. Other sampling rules considered
 
-| Quy tắc | Vì sao không dùng |
+| Rule | Why not used |
 | --- | --- |
-| Ngẫu nhiên từ 29 nước hợp lệ | Không bảo đảm có Việt Nam (trường hợp cơ sở) hay phủ được dải transport share. Với n = 8, mất kiểm soát tổng phân bổ. |
-| Theo thứ hạng phát thải | Mẫu toàn nước lớn: trung quyền hệ số CO₂, M3 không phân biệt được "nhỏ hay lớn". Cũng loại New Zealand (29.2 Mt) — mất trường hợp transport share cao nhất. |
-| Toàn bộ 29 nước hợp lệ | M1 khớp diffusion + bootstrap 10.000 lần cho 29 nước là 29 đường cong; M3 cần cấu trúc sector từng nước. n = 8 là giới hạn thực tế của phương pháp. |
-| Theo mức thu nhập | 8 nước đều thu nhập trung bình-cao, mất Việt Nam — chính là lý do chính sách của dự án. |
-| Toàn bộ ASEAN 10 | 5 nước (Philippines, Cambodia, Laos, Myanmar, Brunei) không có dữ liệu EV nào; Singapore không có trong file IEA. Thiếu dữ liệu quá nhiều để chọn theo nguyên tắc. |
+| Random draw from the 29 eligible | Does not guarantee Vietnam (the baseline case) or coverage of the transport-share range. With n = 8, allocation is uncontrolled. |
+| By emissions rank | Sample of large countries: dilutes the CO₂ coefficient, and M3 cannot distinguish "small vs large". Also excludes New Zealand (29.2 Mt) — losing the highest transport share. |
+| All 29 eligible | Fitting diffusion + 10,000 bootstrap replicates for 29 countries is 29 curves; M3 needs per-country sector structure. n = 8 is the practical limit of the method. |
+| By income level | All 8 would be middle-to-high income, excluding Vietnam — the whole point of the policy question. |
+| All 10 ASEAN | 5 countries (Philippines, Cambodia, Laos, Myanmar, Brunei) have no EV data at all; Singapore is absent from the IEA file. Too much missing data to sample on principle. |
 
 ## Consequences
 
-- Với mỗi quá trình phân tích, kích thước về mẫu của các quốc gia sẽ bị thay đổi. M1 và M2 dựa trên 7 quốc gia và M3 sẽ dựa trên cả 8 quốc gia. Khi đó, kích thước của mẫu phải được làm rõ trong file spec hoặc notebook.
-- Khối lượng dữ liệu của Vietnam bị suy giảm trong 2 đến 3 module mà nó sở hữu. Series `cars` bị trống 5 năm, khá mỏng cho M1. Dữ liệu các điểm sạc chỉ trong 2 năm, khó đóng góp cho M2. Tuy nhiên, series `2 and 3 wheelers` lại cực kỳ nhiều và khá rộng trong file với 11 năm liên tiếp - đó là mốt cho chính sách ban xe máy sử dụng nhiên liệu hóa thạch. Nếu M1 chỉ gồm xe hơi, Vietnam có thể bị loại khỏi kết quả và quyết định trên nằm trong file spec.
-- Các bảng số liệu dùng EDGAR 2025, nhưng 2025 mới là bản sơ bộ (Fast Track) còn 2024 là bản cuối. Ở New Zealand, transport share dịch 2.6 điểm phần trăm giữa hai năm. Spec cần chốt rõ năm nào là năm chính và năm nào là kiểm tra độ nhạy.
-- IEA làm tròn hai chữ số có ý nghĩa. Ở các giá trị nhỏ như của Vietnam (0.0016% năm 2018, 0.041% năm 2021), độ chính xác này giới hạn ý nghĩa của bootstrap CI, nên ngưỡng so sánh cho M1 phải tính đến sàn làm tròn.
-- Tên quốc gia giữa hai file khác nhau: EDGAR dùng `Viet Nam` / `United States` / `South Korea` / `Türkiye`, IEA dùng `Viet Nam` / `USA` / `Korea` / `Turkiye`. `prepare_data.py` cần bảng ánh xạ tường minh, nếu không sẽ âm thầm bỏ mất dòng - cùng kiểu lỗi đã che giấu việc thiếu Singapore.
-- Hai file xlsx đều bị gitignore nên không được commit. Bảng 1 và Bảng 2 trong ADR này là bản ghi bền vững của số liệu. Muốn thay đổi mẫu sau này thì phải viết ADR mới thay thế ADR này, không sửa tại chỗ.
+- **Sample size changes with every module.** M1 and M2 run on 7 countries, M3 on all 8. The sample size must be stated explicitly in the spec or notebook.
+- **Vietnam's data is thin in 2–3 of its modules.** The `cars` series has 5 scattered years, which is thin for M1; charging data covers only 2 years, so Vietnam contributes little to M2. But `2 and 3 wheelers` is rich — 11 continuous years — and is the basis for the two-wheeler policy. If M1 covers only cars, Vietnam may be excluded from results; that decision belongs in the spec.
+- **Tables use EDGAR 2025 data from the EDGAR 2026 release (Fast Track); 2024 is the final release.** New Zealand's transport share shifts **2.6 percentage points** between the two years. The spec must state which year is primary and which is the sensitivity check.
+- **IEA rounds to two significant figures.** For small values such as Vietnam's (0.0016% in 2018, 0.041% in 2021), this limits the precision of bootstrap CIs, so M1's comparison threshold must account for the rounding floor.
+- **Country names differ between files:** EDGAR uses `Viet Nam` / `United States` / `South Korea` / `Türkiye`; IEA uses `Viet Nam` / `USA` / `Korea` / `Turkiye`. `prepare_data.py` needs an explicit mapping table, otherwise rows are silently dropped — the same class of bug that hid Singapore's absence.
+- **Both xlsx files are gitignored**, so they are not committed. The tables in this ADR are the durable record of the numbers. Changing the sample later requires a new ADR superseding this one, not an in-place edit.
