@@ -33,7 +33,7 @@
 
 Cơ sở của từng vai trò, dựa trên Bảng 1 và Bảng 2:
 
-- **Cơ sở (Vietnam)** - nước gốc của câu hỏi chính sách; `2 and 3 wheelers` có 11 năm liên tục.
+- **Cơ sở (Vietnam)** - nước gốc của câu hỏi chính sách; `2 and 3 wheelers` có 11 năm liên tục; Việt Nam chỉ tham gia Q1 và Q4.
 - **ĐNA gần nhất để so sánh (Thailand)** - cùng khu vực, nhưng transport share 30.3% so với 13.1% của Việt Nam: chênh 2.3 lần, và dữ liệu đầy đủ 15 năm.
 - **ĐNA giàu có (Singapore)** - transport share 10.0%, thấp thứ hai trong mẫu; tương phản với Việt Nam.
 - **Trường hợp irony (China)** - transport share thấp nhất mẫu (8.3%) nhưng là nước phát thải lớn nhất (13,057 Mt) và áp lực chuyển đổi lớn nhất. Chỉ "irony" ở chỗ tỉ lệ so với quy mô.
