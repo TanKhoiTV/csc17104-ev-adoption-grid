@@ -1,5 +1,13 @@
 # ADR-005: Chốt mô hình cộng tác: branch, merge và review
 
+## Status
+
+Accepted
+
+## Date
+
+2026-11-10
+
 ## Context
 
 - Nhóm gồm 2 thành viên, cùng repo, deadline 29/11. Cần quy ước branch, merge strategy, review process để tránh conflict và giữ attribution cá nhân (brief cho phép điểm cá nhân khá nhau dựa trên Git history và Q&A).
