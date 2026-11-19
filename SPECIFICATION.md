@@ -44,7 +44,7 @@ phải tải lại và kiểm hash trước khi chạy (ADR-002 D.4).
 | # | Đơn vị quan sát | Cỡ mẫu | Loại trừ, kèm lý do |
 | --- | --- | --- | --- |
 | **Q1** | quốc gia | **7** (mô tả cấu trúc cho 8) | Singapore: không có dòng nào trong file IEA ⇒ không có tốc độ áp dụng |
-| **Q2** | quốc gia–năm, `cars` | **84** (train 60 / test 24) sau lag | Việt Nam: `cars` chỉ có 2018 trước 2021, mà lag cần 2017 ⇒ **0 dòng huấn luyện** (ADR-008 D.5); Singapore: như trên |
+| **Q2** | quốc gia–năm, `cars` | **78** (train 54 / test 24): gốc dự báo 2011–2019 cho train (mục tiêu 2012–2020), 2020–2023 cho test (mục tiêu 2021–2024); **16 dòng train có NaN ở đặc trưng điểm sạc** (xem §3) | Việt Nam: `cars` chỉ có 2018 trước 2021, mà lag cần 2017 ⇒ **0 dòng huấn luyện** (ADR-008 D.5); Singapore: như trên |
 | **Q3** | quốc gia–năm | **70** ô, **64** sau lag 1 năm | Việt Nam: chỉ 2 năm dữ liệu sạc (ADR-006 D.6); Singapore: như trên |
 | **Q4** | quốc gia–năm, Việt Nam | **11** (2014–2024), chuỗi `2 and 3 wheelers` | Không loại; `cars` chỉ dùng đối chiếu |
 
@@ -65,10 +65,16 @@ sang future work (ADR-001 C.5).
 
 ### Q2
 - **Mục tiêu:** `EV sales share` của năm **t+1**, `mode = Cars`.
-- **Đặc trưng (chỉ dùng thông tin có tại thời điểm dự báo):** sales share trễ 1 và 2 năm; stock share trễ 1 năm;
-  điểm sạc/1.000 dân trễ 1 năm; log GDP bình quân đầu người trễ 1 năm; định danh quốc gia; chỉ số năm.
-- **Loại trừ để chống rò rỉ:** mọi biến cùng năm `t`; toàn bộ `category = Projection-STEPS` (IEA có dự báo tới
+- **Đặc trưng (chỉ dùng thông tin có tại thời điểm dự báo `t`, dự báo năm `t+1`):** sales share tại `t` và `t−1`
+  (trễ 1 và 2 năm so với mục tiêu); stock share tại `t` (trễ 1 năm); điểm sạc/1.000 dân tại `t` (trễ 1 năm);
+  log GDP bình quân đầu người tại `t`; định danh quốc gia; chỉ số năm.
+- **Loại trừ để chống rò rỉ:** mọi biến cùng năm `t+1`; toàn bộ `category = Projection-STEPS` (IEA có dự báo tới
   2030 — đưa vào là rò rỉ đầu ra mô hình của IEA vào biến mục tiêu); mọi biến được tạo từ chính biến mục tiêu.
+- **Giá trị thiếu (đặc trưng điểm sạc):** điểm sạc chỉ bắt đầu từ 2017 (Thái Lan, New Zealand), 2014 (Trung Quốc),
+  2012 (Đức) ⇒ **16 dòng train** (2011–2016 của Thái Lan/New Zealand, 2011–2013 của Trung Quốc, 2011 của Đức)
+  nhận NaN ở gốc dự báo; **tập test không có NaN** (mọi chuỗi sạc phủ 2020–2023). Xử lý: `SimpleImputer`
+  (median) **bên trong Pipeline, fit chỉ trên tập train**; số dòng NaN phải được in ra trước khi impute. Không
+  loại dòng (panel sẽ nghiêng về các nước có lịch sử sạc dài), không điền 0 (fabricate, ADR-003 A.6).
 
 ### Q3
 - **Kết quả:** `EV sales share` (`cars`). **Giải thích:** điểm sạc công cộng trên 1.000 dân, **trễ 1 năm**
