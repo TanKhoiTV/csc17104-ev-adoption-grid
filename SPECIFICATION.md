@@ -2,7 +2,7 @@
 
 ## Status
 
-Proposed — **đóng băng trước khi chạy bất kỳ phân tích nào**
+Đề xuất — **đóng băng trước khi chạy bất kỳ phân tích nào**
 
 ## Date
 
@@ -38,8 +38,10 @@ Giả thuyết phải **có hướng** ở nơi có cơ sở lý thuyết, và p
 ## 2. Dữ liệu và mẫu
 
 Dữ liệu: `data/EDGAR_2026_GHG_booklet_2026.xlsx` (SHA-256 `BB77A0DA…`) và
-`data/EV Data Explorer 2025.xlsx` (SHA-256 `309C6342…`), cùng nguồn World Bank qua API. Không commit vào git;
-phải tải lại và kiểm hash trước khi chạy (ADR-002 D.4).
+`data/EV Data Explorer 2025.xlsx` (SHA-256 `309C6342…`), cùng **World Bank Open Data API** (GDP bình quân
+đầu người, nhóm thu nhập — nguồn kiểm soát, không phải nguồn chính; giấy phép CC BY 4.0, xác nhận trên trang
+dataset khi tải; ngày tải ghi trong notebook khi thu thập, theo quy tắc nguồn mới của ADR-002). Không commit vào
+git; phải tải lại và kiểm hash trước khi chạy (ADR-002 D.4).
 
 | # | Đơn vị quan sát | Cỡ mẫu | Loại trừ, kèm lý do |
 | --- | --- | --- | --- |
