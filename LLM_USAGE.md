@@ -34,6 +34,7 @@ high.
 | One CHANGES_REQUESTED finding on ADR-007 (#33) | Review comment | The PR body claims three packages were added to `min_ds-env.yml`, but the PR changes only the ADR; env file confirmed untouched on the branch. |
 | Q2 sample recomputation for SPECIFICATION.md | Commit `7493e00` on PR #28 | Lag-2 feature priced in from the raw file: **78 observations (train 54 / test 24), 16 charger-NaN rows in train**. Policy chosen by the member: keep lag-2, impute NaN inside the train-only Pipeline. |
 | Fix commits on ADR-001 (status wording; China reversal claim), ADR-008 (status wording; series minimums), SPECIFICATION.md (Q2 count, charger-NaN policy, World Bank source note), this file | Commits `4b58c25`, `afa3754`, `7493e00`, `87d3109` | AI drafted; member reviewed each diff before push. |
+| Issue-board cleanup | Issues #1, #13, #18 edited; #5 reassigned to TanKhoiTV | #1: stale M1/M2/M2b/M3 labels replaced with Q1–Q4 (missed by the earlier renumbering pass). #13/#18: aligned with ADR-003 (root-level script path, long no-pivot schema, ADR-003 as the schema authority, ADR-003 added to the merge order) and annotated with the two PR #31 review findings that must be fixed first. #5: reassigned per ADR-005 D.6 since Khoi wrote ADR-001. Member reviewed each edit before push. |
 
 **Where the AI was wrong, and what caught it.**
 
