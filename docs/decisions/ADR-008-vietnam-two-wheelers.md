@@ -2,7 +2,7 @@
 
 ## Status
 
-Proposed
+Đề xuất
 
 ## Date
 
@@ -29,9 +29,9 @@ Bốn dữ kiện quyết định nội dung ADR này:
   Thái Lan 2010–2024 (15), New Zealand 2010–2024 (15), Trung Quốc 2012–2024 (13), Đức 2012–2024 (13),
   Mỹ 2012–2024 (13), Việt Nam 2014–2024 (11), Nhật 2018–2024 (7).
 - **Nhưng chất lượng tín hiệu thì khác nhau rõ rệt.** Trên `2 and 3 wheelers`, 4/7 chuỗi phẳng hoặc đảo chiều:
-  Đức 0,28 → 15,0 (2022) → 3,6; New Zealand 0,098 → 8,0 (2023) → 3,9; Trung Quốc 13 → 55 (2021) → 46;
-  Mỹ 0,099 → 1,7 gần như phẳng; Thái Lan 0,0004 → 1,2 gần như phẳng. Trên `cars`, 6 nước còn lại đều
-  là đường S gần đơn điệu.
+  Đức 0,28 (2012) → 15,0 (2022) → 3,6; New Zealand 0,098 (2014, min của chuỗi) → 8,0 (2023) → 3,9;
+  Trung Quốc 13 (2012) → 55 (2021) → 46; Mỹ 0,099 (2012) → 1,7 gần như phẳng; Thái Lan 0,0004 (min của
+  chuỗi, 2017) → 1,2 gần như phẳng. Trên `cars`, 6 nước còn lại đều là đường S gần đơn điệu.
 - **Việt Nam không vào được Q2 (ML).** Q2 chia train ≤ 2020 và dùng biến trễ 1 năm; Việt Nam trên `cars`
   chỉ có 2018 trước 2021, mà 2018 cần lag 2017 (không tồn tại) ⇒ **0 dòng huấn luyện**. Trên `2 and 3 wheelers`
   thì Việt Nam có 6 dòng huấn luyện, nhưng khi đó biến mục tiêu của mô hình gộp sẽ khác nghĩa giữa các nước.
