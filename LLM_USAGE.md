@@ -16,6 +16,32 @@ blur.
 
 ---
 
+## Entry 003 — 2026-11-19 — review pass on all 10 open PRs, fix commits on the four `khoi/` PRs
+
+**Owner:** Khoi
+**Tool:** Pi-Bolt (coding-agent harness) · model `deepseek-v4.1-flash` (provider `opencode-go`), reasoning effort
+high.
+
+**Asked.** (a) Review all 10 open PRs. (b) Verify every checkable number against the two source `.xlsx` files.
+(c) Post the reviews, then apply fix commits to the four `khoi/` PRs.
+
+**Produced and how it was used.**
+
+| Output | Used as | Change / verification |
+| --- | --- | --- |
+| Formal reviews on the six `dat/` PRs (#14 APPROVE, #31/#32/#33 CHANGES_REQUESTED, #35/#36 APPROVE) | Posted as `TanKhoiTV` on GitHub | Every count re-derived from the raw files before posting: ADR-004 tables (8/8 countries, pool 29, 25 exclusions), ADR-008 values, SPECIFICATION's sparse-table claims and the NZ 2.55 pp shift. |
+| Two CHANGES_REQUESTED findings on ADR-003 (#31) | Review comment | Verified in the file: the CO₂-2025 slice is **61 rows, not 64** (Singapore lacks `Agriculture`, Germany/US lack `Waste`); the pinned `powertrain = EV` filter drops all charging, sales and stock rows. |
+| One CHANGES_REQUESTED finding on ADR-007 (#33) | Review comment | The PR body claims three packages were added to `min_ds-env.yml`, but the PR changes only the ADR; env file confirmed untouched on the branch. |
+| Q2 sample recomputation for SPECIFICATION.md | Commit `7493e00` on PR #28 | Lag-2 feature priced in from the raw file: **78 observations (train 54 / test 24), 16 charger-NaN rows in train**. Policy chosen by the member: keep lag-2, impute NaN inside the train-only Pipeline. |
+| Fix commits on ADR-001 (status wording; China reversal claim), ADR-008 (status wording; series minimums), SPECIFICATION.md (Q2 count, charger-NaN policy, World Bank source note), this file | Commits `4b58c25`, `afa3754`, `7493e00`, `87d3109` | AI drafted; member reviewed each diff before push. |
+
+**Where the AI was wrong, and what caught it.**
+
+1. **The 84-observation Q2 sample survived a hand recomputation** — because the hand check reused the ADR-004 coverage table, which does not encode the lag-2 loss. Lesson: *recompute from the raw file, not from a summary table; a summary inherits its source's blind spots.*
+2. **The first IEA query in this session used `United States` and briefly reported no US charging data.** The ADR-002 D.6 mapping (IEA key `USA`) caught it. Lesson: *the same name-mapping failure the ADR-003 fail-fast rule exists to prevent happens to reviewers too.*
+
+---
+
 ## Entry 002 — 2026-11-07 — `SPECIFICATION.md`, `LLM_USAGE.md`, ADR-001, ADR-008
 
 **Owner:** Khoi
@@ -31,7 +57,7 @@ high.
 | --- | --- | --- |
 | `ADR-001` (research topic, four questions in narrative order) | PR #26, `Closes #5` | AI drafted; member reviewed and accepted. The data limits it records were re-checked by re-reading the output of the coverage script. |
 | `ADR-008` (Q4, avoided-emissions band) | PR #27, `Closes #17` | AI drafted. One AI statement was **wrong and corrected by the AI itself in a follow-up commit** (`829e08d`): it had let Vietnam use the `2 and 3 wheelers` series inside Q1, repeating the definitional inconsistency the same ADR rejects for Q2. |
-| `SPECIFICATION.md` | PR #28, `Closes #2` | AI drafted the whole document from the ADRs. Every number in §2 and §3 (84 / 70 / 64 / 7 / 6 / 11 observations) was recomputed by hand from the ADR-004 coverage table before merging. |
+| `SPECIFICATION.md` | PR #28, `Closes #2` | AI drafted the whole document from the ADRs. Every number in §2 and §3 (70 / 64 / 7 / 6 / 11 observations) was recomputed by hand from the ADR-004 coverage table before merging. The Q2 count was first recomputed as 84 (one lag) — **wrong, caught in review**: the two-year lag feature removes two more rows per country. Corrected to 78 (train 54 / test 24) in commit `7493e00`; see Entry 003. |
 | Question renumbering (`M3→Q1`, `M1→Q2`, `M2→Q3`, `M2b→Q3b`) | Issues #17, #19, #21, #25 edited | AI performed the edit; member authorised it. Drafts for the other member's issues (#22, #23) were left unapplied, for that member to accept. |
 | This file | PR for #29 | AI drafted. Member reviewed. |
 
