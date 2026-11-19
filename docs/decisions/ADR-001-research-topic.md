@@ -2,7 +2,7 @@
 
 ## Status
 
-Proposed
+Đề xuất
 
 ## Date
 
@@ -41,7 +41,7 @@ Số thứ tự câu hỏi **trùng với thứ tự trình bày**, không trùn
 ### Vì sao bốn câu hỏi này
 
 - **Q1 trả lời đúng câu hỏi mà ADR-001 đặt ra.** Một bảng tỉ trọng sector, tự nó, không trả lời được "giao thông có phải là đòn bẩy đúng không". Q1 biến bảng đó thành một kiểm định.
-- **Q2 là câu hỏi ML duy nhất** mà đề bài bắt buộc, và khung thời gian kiểm định 2021–2024 chứa các cú đảo chiều do chính sách (Đức, New Zealand, Trung Quốc) — tức bài toán dự báo có một kiểu thất bại trung thực để phân tích.
+- **Q2 là câu hỏi ML duy nhất** mà đề bài bắt buộc, và khung thời gian kiểm định 2021–2024 chứa các cú đảo chiều do chính sách (Đức 31 → 24 → 19; New Zealand 27 → 11; Trung Quốc đảo chiều trên `2 and 3 wheelers` nhưng đơn điệu trên `cars`) — tức bài toán dự báo có một kiểu thất bại trung thực để phân tích.
 - **Q3 giữ nguyên thiết kế đã chốt trước ở ADR-006**, kể cả nhánh "không xác định" là kết quả hợp lệ.
 - **Q4 giữ trường hợp chính sách** mà dự án được tổ chức quanh nó, và dùng chuỗi dữ liệu dày nhất của Việt Nam.
 
