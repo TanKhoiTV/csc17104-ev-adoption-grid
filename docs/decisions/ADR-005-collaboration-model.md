@@ -2,7 +2,7 @@
 
 ## Status
 
-Accepted
+Đề xuất
 
 ## Date
 
@@ -15,11 +15,11 @@ Accepted
 
 ## Decision
 
-- D.1. Branch naming. `khoi/<topic>` và `dat/<topic>`, tách từ `main` mới nhất. Tên topic ngắn, kebab-case, khớp issue (vd. `dat/adr-004-conversion-method`). Không commit thẳng vào `main`.
+- D.1. Branch naming. `khoi/<topic>` và `dat/<topic>`, tách từ `main` mới nhất. Tên topic ngắn, kebab-case, khớp issue (vd. `dat/adr-003-conversion-method`). Không commit thẳng vào `main`.
 - D.2. Merge strategy: merge commits, không rebase/squash. Giữ từng commit của tác giả để Git history phản ánh đúng ai làm gì; squash làm mất granularity, rebase làm mất timestamp và attribution.
 - D.3. Review gate. PR phải được thành viên còn lại review trước khi merge. Reviewer đặt `CHANGES_REQUESTED` với inline comments; tác giả fix bằng commit mới (không force-push) rồi re-request review. Không self-merge.
 - D.4. Thứ tự merge. ADRs -> data layer (ADR-003 + `prepare_data.py`) -> analysis (Q1/Q3/Q4) -> ML (Q2) -> integration (notebook + slide). Lý do: downstream phụ thuộc upstream; merge ngược thứ tự gây conflict hàng loại.
-- D.5. Review checklist. Trước khi approve: (1) chạy notebook end-to-end trên máy sạch; (2) in cỡ mẫu trước/sau mỗi bước lọc/gộp và đối chiếu SPECIFICATION.md §2; (3) verify plot có tiêu đề, đơn vị, chú giải; (4) verify input hash khớp ADR-002; (5) không còn M-term stray (grep M[1-3] sạch, trừ parenthetical giải thích).
+- D.5. Review checklist. Trước khi approve: (1) khi PR có notebook/code, chạy notebook end-to-end trên máy sạch; (2) in cỡ mẫu trước/sau mỗi bước lọc/gộp và đối chiếu SPECIFICATION.md §2; (3) verify plot có tiêu đề, đơn vị, chú giải; (4) verify input hash khớp ADR-002; (5) không còn M-term stray (grep M[1-3] sạch, trừ parenthetical giải thích).
 - D.6. Attribution. Mỗi ADR/issue do một người sở hữu; thành viên còn lại review. Khi cần viết tay (vd. Dat bận), phải ghi rõ trong PR body và issue được reassign.
 
 ## Alternatives Considered
