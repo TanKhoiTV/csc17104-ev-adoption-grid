@@ -33,6 +33,7 @@ môi trường `PI_PROVIDER`; catalog id `opencode` là id upstream của cùng 
 | Verification of Dat's ADR-007 env fix (#33) | Reviewer confidence | `statsmodels=0.14`, `linearmodels=6.1`, `pyfixest=0.60` pinned + mandatory `seaborn` 0.13.0→0.13.2 bump (pyfixest 0.60 requires ≥0.13.2) — a dependency conflict neither reviewer caught in round 1. |
 | Notebook-filename verification (Dat's #28 item) | Commit `41d31d2` on PR #28 | Extracted the text of `CSC17104_2026_Final_Project.pdf` (the 5-page brief, not the 16-page slide deck): all three notebook names match the deliverable tree **verbatim**. |
 | Fix commits for Dat's review items | `04b6110` (#26: PR-body ownership note, A.4 reword, C.6 criteria→question table), `0bf6172` (#27: electrification = fleet share `EV stock share`, stale `M1` reword), `41d31d2` (#28: Spearman 0.714, Q2 threshold unit, filename verification note) | AI drafted; member reviewed each diff before push. |
+| Repo-structure alignment issue | Issue #37 filed; `@aFlyingSeal` tagged | AI drafted the issue from the brief §4 deliverable-tree verification (`environment.yml` vs `min_ds-env.yml`; `data/raw/` vs files in `data/`); member reviewed before filing. |
 
 **Where the AI was wrong, and what caught it.**
 
