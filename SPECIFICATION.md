@@ -31,7 +31,7 @@ Giả thuyết phải **có hướng** ở nơi có cơ sở lý thuyết, và p
 | # | Câu hỏi | Giả thuyết chốt trước | Loại |
 | --- | --- | --- | --- |
 | **Q1** | Trọng số ngành giao thông trong CO₂ quốc gia có dự báo được tốc độ điện khí hoá, sau khi kiểm soát thu nhập? | **H1 (có hướng):** trọng số giao thông cao hơn đi cùng tốc độ áp dụng nhanh hơn. Nếu trái dấu hoặc không phân biệt được với 0, báo cáo nguyên trạng. | Phân tích |
-| **Q2** | Có thể dự báo tỉ lệ áp dụng của năm sau giữa các quốc gia không, và mô hình hỏng ở đâu? | **H2 (không hướng):** mô hình học được quy luật diffusion và **vượt baseline persistence ≥ 1,0 pp RMSE** trên tập test. Không vượt được là một kết quả hợp lệ. | **ML** |
+| **Q2** | Có thể dự báo tỉ lệ áp dụng của năm sau giữa các quốc gia không, và mô hình hỏng ở đâu? | **H2 (không hướng):** mô hình học được quy luật diffusion và **vượt baseline persistence ≥ 1,0 điểm phần trăm của `EV sales share`** trên tập test. Không vượt được là một kết quả hợp lệ. | **ML** |
 | **Q3** | Mật độ trạm sạc công cộng có làm tăng tỉ lệ áp dụng không? | **H3 (có hướng):** hệ số của biến sạc trễ 1 năm dương và CI không chứa 0, **với điều kiện** kiểm tra lead/lag không phát hiện nhân quả ngược. | Phân tích |
 | **Q4** | Chuyển đổi ở Việt Nam có phải là câu chuyện xe hai bánh, và phần CO₂ tránh được nằm trong khoảng nào? | **H4 (mô tả):** tỉ lệ áp dụng của xe hai bánh cao hơn xe hơi một bậc rõ rệt; phần CO₂ tránh được là một dải, không phải một điểm. | Phân tích |
 
@@ -108,15 +108,16 @@ sang future work (ADR-001 C.5).
 
 Đây là phần không được sửa sau khi xem kết quả.
 
-**Q1.** Với n = 7, giá trị tới hạn của Spearman ở α = 0,05 hai phía là **|ρ| ≈ 0,71**. Vì vậy:
-- `|ρ| > 0,71` và bootstrap CI không chứa 0 ⇒ **có quan hệ**, báo cáo kèm CI.
+**Q1.** Với n = 7, giá trị tới hạn của Spearman ở α = 0,05 hai phía là **|ρ| ≈ 0,714**. Vì vậy:
+- `|ρ| > 0,714` và bootstrap CI không chứa 0 ⇒ **có quan hệ**, báo cáo kèm CI.
 - Ngược lại ⇒ **không phân biệt được với 0**, và phải nói rõ rằng với n = 7, một quan hệ trung bình cũng không
   phân biệt được — kết quả null ở đây **không** là bằng chứng không có quan hệ.
 - Không dùng ngôn ngữ nhân quả ở Q1.
 
-**Q2.** Thành công khi và chỉ khi **RMSE trên test nhỏ hơn RMSE của baseline persistence ít nhất 1,0 điểm phần
-trăm**. Không đạt ⇒ báo cáo là thất bại, kèm phân tích lỗi theo quốc gia và theo khoảng giá trị. Không đổi
-metric sau khi xem test.
+**Q2.** Thành công khi và chỉ khi **RMSE trên test nhỏ hơn RMSE của baseline persistence ít nhất 1,0 điểm
+phần trăm của `EV sales share`** (đơn vị của RMSE trùng đơn vị của biến mục tiêu; đây là ngưỡng tuyệt đối,
+không phải 1% tương đối). Không đạt ⇒ báo cáo là thất bại, kèm phân tích lỗi theo quốc gia và theo khoảng giá trị.
+Không đổi metric sau khi xem test.
 
 **Q3.** Giữ nguyên bảng phán quyết của ADR-006 D.5:
 
@@ -162,7 +163,9 @@ Cả hai nhánh "không xác định" là kết quả hợp lệ và phải đư
 | 03 | **Q2** — câu hỏi ML | `03_ml_question.ipynb` |
 
 Đánh số câu hỏi **không** trùng đánh số notebook: Q2 mang số 2 nhưng nằm ở file `03_`, vì đề bài cố định tên
-file. Đã ghi ở ADR-001 C.4.
+file. Đã ghi ở ADR-001 C.4. Ba tên notebook đã đối chiếu **verbatim** với brief `CSC17104_2026_Final_Project.pdf`
+§4 (deliverable tree): `01_collection_exploration.ipynb`, `02_analysis.ipynb` (brief cho phép "split per question
+if large"), `03_ml_question.ipynb`.
 
 ## 9. Nhật ký sai lệch
 
