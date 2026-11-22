@@ -108,8 +108,10 @@ sang future work (ADR-001 C.5).
 
 Đây là phần không được sửa sau khi xem kết quả.
 
-**Q1.** Với n = 7, giá trị tới hạn của Spearman ở α = 0,05 hai phía là **|ρ| ≈ 0,714**. Vì vậy:
-- `|ρ| > 0,714` và bootstrap CI không chứa 0 ⇒ **có quan hệ**, báo cáo kèm CI.
+**Q1.** Với n = 7, giá trị tới hạn của Spearman ở α = 0,05 hai phía là **|ρ| ≥ 0,786** (giá trị chính xác
+0,7857; exact permutation 5.040 hoán vị, p = 0,048 — giá trị 0,714 tương ứng α = 0,10, p = 0,088, không dùng).
+Vì vậy:
+- `|ρ| ≥ 0,786` và bootstrap CI không chứa 0 ⇒ **có quan hệ**, báo cáo kèm CI.
 - Ngược lại ⇒ **không phân biệt được với 0**, và phải nói rõ rằng với n = 7, một quan hệ trung bình cũng không
   phân biệt được — kết quả null ở đây **không** là bằng chứng không có quan hệ.
 - Không dùng ngôn ngữ nhân quả ở Q1.
