@@ -34,6 +34,7 @@ môi trường `PI_PROVIDER`; catalog id `opencode` là id upstream của cùng 
 | Notebook-filename verification (Dat's #28 item) | Commit `41d31d2` on PR #28 | Extracted the text of `CSC17104_2026_Final_Project.pdf` (the 5-page brief, not the 16-page slide deck): all three notebook names match the deliverable tree **verbatim**. |
 | Fix commits for Dat's review items | `04b6110` (#26: PR-body ownership note, A.4 reword, C.6 criteria→question table), `0bf6172` (#27: electrification = fleet share `EV stock share`, stale `M1` reword), `41d31d2` (#28: Spearman 0.714, Q2 threshold unit, filename verification note) | AI drafted; member reviewed each diff before push. |
 | Repo-structure alignment issue | Issue #37 filed; `@aFlyingSeal` tagged | AI drafted the issue from the brief §4 deliverable-tree verification (`environment.yml` vs `min_ds-env.yml`; `data/raw/` vs files in `data/`); member reviewed before filing. |
+| Round-2 close-out: Spearman correction, approvals, merges | Commit `2569407` on #28; APPROVE reviews on #31/#32/#33/#36; merges of #26/#27/#30 | Member chose Option A (α = 0.05, threshold 0.786) after `@aFlyingSeal`'s exact-permutation finding; AI brute-forced 5,040 permutations independently to confirm (0.7857 → p = 0.048; 0.7143 → p = 0.088) before applying. |
 
 **Where the AI was wrong, and what caught it.**
 
@@ -41,6 +42,12 @@ môi trường `PI_PROVIDER`; catalog id `opencode` là id upstream của cùng 
    entries instead of reading the session's own environment. The actual value was `glm-5.3` (corrected in the
    same pass as this entry). Lesson: *metadata about the current session is read from the session, not
    inherited from a template.*
+2. **The round-1 review verified the spec's Spearman threshold "|ρ| ≈ 0.714 at α = 0.05" as correct** — from
+   memory of printed critical-value tables, without computing the exact permutation distribution. `@aFlyingSeal`
+   computed it exactly: at n = 7, 0.714 is the **α = 0.10** threshold (p = 0.088); the α = 0.05 value is
+   **0.786** (p = 0.048). Reproduced independently by brute force (5,040 permutations) before correcting the
+   spec (commit `2569407`). Lesson: *for small-n rank statistics, compute the exact permutation — a printed
+   table is a secondary source.*
 
 ---
 
