@@ -68,7 +68,7 @@ Công thức:
 ```
 CO₂ tránh được = CO₂ giao thông
                × tỉ trọng xe hai bánh trong vận tải đường bộ
-               × mức điện khí hoá đội xe hai bánh
+               × mức điện khí hoá đội xe hai bánh (= tỉ trọng xe điện trong đội xe hai bánh, `EV stock share`)
                × (1 − cường độ phát thải của EV hai bánh / cường độ phát thải của xe hai bánh ICE)
 ```
 
@@ -77,7 +77,9 @@ Ba quy tắc bắt buộc:
 - **Báo cáo dạng dải** theo các giả định cường độ lưới (thấp / trung bình / cao), không báo một số duy nhất.
   Hệ số thứ tư là chỗ lưới điện đi vào Q4 mà không cần một câu hỏi riêng (ADR-001, phạm vi).
 - **Ghi rõ đâu là dữ liệu, đâu là giả định.** Tử số thứ nhất và thứ hai đến từ EDGAR và IEA; mức điện khí hoá
-  là dữ liệu IEA; tỉ lệ cường độ phát thải là **giả định có trích dẫn**, và phải nằm trong dải độ nhạy.
+  (theo định nghĩa ở công thức: **tỉ trọng xe điện trong đội xe** — `EV stock share` — không phải tỉ lệ km chạy
+  điện; dùng km sẽ đếp trùng với hệ số cường độ phía dưới) là dữ liệu IEA; tỉ lệ cường độ phát thải là **giả định
+  có trích dẫn**, và phải hiện trong bảng độ nhạy 3 × 3 ở §4 của `SPECIFICATION.md`, không chỉ trong văn xuôi.
 - **Cận trên không phải kết quả nhân hai số.** `tổng CO₂ × 13,1% × 100%` chỉ là kích thước ngành giao thông,
   không phải phát thải tránh được, vì nó bỏ qua mức điện khí hoá đã đạt và bỏ qua việc EV vẫn phát thải
   theo lưới. Phương án này bị loại ở A.4.
@@ -85,7 +87,7 @@ Ba quy tắc bắt buộc:
 ### D.5. Hoà giải với Q2 — điểm mâu thuẫn trước đây
 
 Trước ADR này, issue #17 và issue #21 mâu thuẫn nhau: #21 nói "dùng `2 and 3 wheelers` cho Việt Nam"
-trong câu hỏi ML, #17 lại nói M1 phải dùng chuỗi hai bánh cho Việt Nam. **Quyết định dứt điểm:**
+trong câu hỏi ML (nay là Q2), #17 lại nói câu hỏi ML phải dùng chuỗi hai bánh cho Việt Nam. **Quyết định dứt điểm:**
 
 - **Q2 giữ `cars`, 6 quốc gia, loại Việt Nam**, và báo cáo lý do loại (0 dòng huấn luyện sau lag) theo đúng
   kỷ luật của ADR-006 D.6.
