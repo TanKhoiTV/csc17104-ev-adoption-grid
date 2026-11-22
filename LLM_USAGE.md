@@ -16,11 +16,38 @@ blur.
 
 ---
 
+## Entry 004 — 2026-11-20 — review round 2: verify Dat's fixes, address Dat's review items
+
+**Owner:** Khoi
+**Tool:** Pi-Bolt (coding-agent harness) · model `glm-5.3` (provider `opencode-go` — id do harness báo qua biến
+môi trường `PI_PROVIDER`; catalog id `opencode` là id upstream của cùng nguồn).
+
+**Asked.** (a) Check updates on the 10 open PRs. (b) Verify Dat's fix commits against the source files.
+(c) Apply Dat's review items on the four `khoi/` PRs.
+
+**Produced and how it was used.**
+
+| Output | Used as | Change / verification |
+| --- | --- | --- |
+| Verification of Dat's ADR-003 fix (#31) | Reviewer confidence, no further change request | Recomputed the pinned coverage table from the raw file: all 7 per-country rows match, total **496** ✓; 0 NaN, 0 duplicate keys ✓; partial fast/slow coverage (CN ×4, US ×5 slow-only; JP ×4, NZ ×1 fast-only) matches ✓. |
+| Verification of Dat's ADR-007 env fix (#33) | Reviewer confidence | `statsmodels=0.14`, `linearmodels=6.1`, `pyfixest=0.60` pinned + mandatory `seaborn` 0.13.0→0.13.2 bump (pyfixest 0.60 requires ≥0.13.2) — a dependency conflict neither reviewer caught in round 1. |
+| Notebook-filename verification (Dat's #28 item) | Commit `41d31d2` on PR #28 | Extracted the text of `CSC17104_2026_Final_Project.pdf` (the 5-page brief, not the 16-page slide deck): all three notebook names match the deliverable tree **verbatim**. |
+| Fix commits for Dat's review items | `04b6110` (#26: PR-body ownership note, A.4 reword, C.6 criteria→question table), `0bf6172` (#27: electrification = fleet share `EV stock share`, stale `M1` reword), `41d31d2` (#28: Spearman 0.714, Q2 threshold unit, filename verification note) | AI drafted; member reviewed each diff before push. |
+
+**Where the AI was wrong, and what caught it.**
+
+1. **Entry 003 originally recorded this session's model as `deepseek-v4.1-flash`** — copied from the earlier
+   entries instead of reading the session's own environment. The actual value was `glm-5.3` (corrected in the
+   same pass as this entry). Lesson: *metadata about the current session is read from the session, not
+   inherited from a template.*
+
+---
+
 ## Entry 003 — 2026-11-19 — review pass on all 10 open PRs, fix commits on the four `khoi/` PRs
 
 **Owner:** Khoi
-**Tool:** Pi-Bolt (coding-agent harness) · model `deepseek-v4.1-flash` (provider `opencode-go`), reasoning effort
-high.
+**Tool:** Pi-Bolt (coding-agent harness) · model `glm-5.3` (provider `opencode-go`), reasoning effort high.
+*(Model string corrected 2026-11-20 — see Entry 004.)*
 
 **Asked.** (a) Review all 10 open PRs. (b) Verify every checkable number against the two source `.xlsx` files.
 (c) Post the reviews, then apply fix commits to the four `khoi/` PRs.
