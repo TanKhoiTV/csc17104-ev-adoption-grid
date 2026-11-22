@@ -14,7 +14,7 @@
 - Đề bài cũng đặt ngưỡng độ sâu: mỗi câu hỏi **phi-ML** phải dùng rõ ràng **≥ 2 trong 6 tiêu chí** (D1 ghép dữ liệu, D2 tái cấu trúc & thời gian, D3 biến dẫn xuất, D4 kiểm soát biến gây nhiễu, D5 định lượng bất định, D6 kiểm tra độ vững), và cả bộ câu hỏi phải phủ **≥ 4/6**.
 - Các quyết định nền đã có: dữ liệu ở **ADR-002**, mẫu 8 quốc gia và vai trò từng nước ở **ADR-004**, nhận dạng cho Q3 ở **ADR-006**, câu hỏi thứ tư ở **ADR-008**.
 - Giới hạn dữ liệu đã kiểm chứng ngày 2026-11-07 trên `data/EV Data Explorer 2025.xlsx` (SHA-256 khớp ADR-002 D.2):
-    - Chỉ **5 tham số** dùng được ở cấp quốc gia: `EV sales share`, `EV stock share`, `EV charging points`, `EV sales`, `EV stock` — tất cả đều đã nằm trong ADR-002/ADR-004.
+    - Chỉ **5 tham số** dùng được ở cấp quốc gia: `EV sales share`, `EV stock share`, `EV charging points`, `EV sales`, `EV stock` — tất cả đều đã nằm trong ADR-002/ADR-004 (ADR-003 chỉ giữ 3 tham số đầu vào CSV; `EV sales`/`EV stock` không câu hỏi nào dùng).
     - `Battery demand` và `Oil displacement` chỉ có **6 thực thể tổng hợp** (China, Europe, India, Rest of the world, USA, World), không có Nhật/Đức/Thái Lan/New Zealand/Việt Nam.
     - `Electricity demand` **chỉ tồn tại ở `category = Projection-STEPS`**, không có quan sát lịch sử nào ⇒ không dùng được cho phân tích thực nghiệm.
 - Hệ quả quan trọng: **chiều sâu của dự án phải đến từ việc ghép nguồn và biến dẫn xuất, không phải từ độ rộng của dữ liệu.** Đó cũng chính là hai tiêu chí D1 và D3 mà đề bài thưởng điểm.
@@ -54,7 +54,7 @@ Tên dự án có nhắc tới lưới điện, nhưng **không câu hỏi nào 
 - **A.1. Chủ đề một quốc gia (chỉ Việt Nam).** Loại: mất khả năng so sánh, trong khi Q1–Q3 cần 6–7 quan sát chéo; và mẫu 8 quốc gia đã được chốt trước ở ADR-004 để tránh chọn mẫu theo kết quả.
 - **A.2. Chủ đề một ngành (chỉ giao thông).** Loại: mất phần đối chiếu với Industry/Power, tức mất chính cái làm nên vai trò "irony" của Trung Quốc và "trường hợp tốt nhất" của New Zealand ở ADR-004.
 - **A.3. Chủ đề thuần công nghệ (chỉ diffusion, không có phát thải).** Loại: bỏ mất câu hỏi chính sách, và dễ rơi vào loại câu hỏi mô tả mà đề bài coi là không đủ độ sâu.
-- **A.4. Giữ cấu trúc sector như một câu hỏi mô tả độc lập (M3 cũ).** Loại: đề bài nêu rõ "một groupby, value_counts hoặc describe cộng một biểu đồ" là **không đủ độ sâu**; một bảng tỉ trọng + hai biểu đồ rơi đúng vào mô tả đó.
+- **A.4. Giữ cấu trúc sector như một câu hỏi mô tả độc lập.** Loại: đề bài nêu rõ "một groupby, value_counts hoặc describe cộng một biểu đồ" là **không đủ độ sâu**; một bảng tỉ trọng + hai biểu đồ rơi đúng vào mô tả đó.
 - **A.5. Thêm câu hỏi thứ năm về lưới điện.** Loại: đề bài yêu cầu 2 × n = 4; thêm câu hỏi làm loãng thời gian còn lại (hạn 29/11) và không câu nào được làm kỹ.
 - **A.6. Dùng `Electricity demand` / `Battery demand` để dựng câu hỏi lưới điện.** Loại: `Electricity demand` chỉ có ở Projection-STEPS, `Battery demand` chỉ có 6 thực thể tổng hợp — đã kiểm chứng, xem Context.
 
@@ -65,4 +65,13 @@ Tên dự án có nhắc tới lưới điện, nhưng **không câu hỏi nào 
 - **C.3. "Lưới điện" trong tên dự án không phải một kết quả độc lập**, chỉ là biến kiểm soát ở Q1 và dải giả định ở Q4.
 - **C.4. Đánh số câu hỏi tách khỏi đánh số notebook.** Đề bài cố định tên file `01_collection_exploration`, `02_analysis`, `03_ml_question`, nên **Q2 nằm ở `03_ml_question.ipynb`**. Đây là quy ước đặt tên, không phải lỗi thứ tự; README phải nói rõ một dòng.
 - **C.5. Q3b hoãn.** Thiết kế vẫn nằm trong ADR-006 D.7 như một phần future work, kèm lý do hoãn (phụ thuộc PDF phải số hoá tay, và không nằm trong 4 câu hỏi đăng ký).
-- **C.6. Bốn câu hỏi phủ đủ 6/6 tiêu chí độ sâu**, và mỗi tiêu chí xuất hiện ở **ít nhất hai** câu hỏi. Ràng buộc này phải được kiểm lại nếu sau này có câu hỏi bị cắt.
+- **C.6. Bốn câu hỏi phủ đủ 6/6 tiêu chí độ sâu**, và mỗi tiêu chí xuất hiện ở **ít nhất hai** câu hỏi. Ràng buộc này phải được kiểm lại nếu sau này có câu hỏi bị cắt. Phân bổ cụ thể:
+
+| Tiêu chí | Xuất hiện ở | Cách dùng |
+| --- | --- | --- |
+| D1 — ghép dữ liệu | Q1, Q4 | EDGAR × IEA (cùng một bảng/estimand) |
+| D2 — tái cấu trúc & thời gian | Q2, Q3 | panel dài, chia train/test theo thời gian; trễ 1 năm |
+| D3 — biến dẫn xuất | Q1, Q2, Q4 | tốc độ áp dụng từ hai mốc; sạc/1.000 dân; dải CO₂ tránh được |
+| D4 — kiểm soát biến gây nhiễu | Q1, Q3 | log GDP + nhóm thu nhập; log GDP + fixed effect |
+| D5 — định lượng bất định | Q1, Q2, Q3, Q4 | bootstrap 10.000; RMSE test một lần; wild cluster bootstrap; dải min–max |
+| D6 — kiểm tra độ vững | Q1, Q3, Q4 | EDGAR 2024 thay 2025; cửa sổ sạc; 3 × 3 kịch bản lưới × tỉ trọng hai bánh |
