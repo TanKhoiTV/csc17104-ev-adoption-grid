@@ -111,7 +111,7 @@
 
 - Tên cột trong file nguồn: EDGAR dùng `Country`, IEA dùng `region_country` — không dựa vào khớp tên tự động.
 
-- Áp dụng **fail-fast**: nếu một tên xuất hiện trong file mà không có trong bảng → raise lỗi, không âm thầm bỏ dòng. Đây là cùng kiểu lỗi đã che giấu việc thiếu Singapore.
+- Ánh xạ theo bảng ở trên: chỉ 8 tên canonical được giữ; tên khác có mặt trong file (nước ngoài mẫu) bị loại, **không** phải lỗi. Fail-fast áp dụng ở mức nước đích: nếu một nước trong bảng vắng sau mapping, hoặc xuất hiện ngoài bảng → raise lỗi. Đây là cùng kiểu lỗi đã che giấu việc thiếu Singapore.
 - Country canonical là khoá nối giữa hai CSV và với ADR-004.
 
 ### D.5. Encoding và định dạng output

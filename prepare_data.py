@@ -145,6 +145,8 @@ def check_input_hashes() -> None:
 
 
 def build_emissions() -> pd.DataFrame:
+    assert set(SECTOR_GROUP) == set(EDGAR_SECTORS), \
+        "SECTOR_GROUP must cover all 8 EDGAR sectors"
     df_raw = pd.read_excel(EDGAR_PATH, sheet_name=EDGAR_SHEET, engine="openpyxl")
     if "Substance" not in df_raw.columns or "Country" not in df_raw.columns:
         raise ValidationError("EDGAR sheet missing required columns")
@@ -178,10 +180,6 @@ def build_emissions() -> pd.DataFrame:
             raise ValidationError(
                 f"EDGAR sector coverage mismatch for {country}: "
                 f"missing={sorted(missing)}, extra={sorted(extra)}"
-            )
-        if len(sectors) < 7:
-            raise ValidationError(
-                f"EDGAR: {country} has only {len(sectors)} sectors (need >= 7)"
             )
 
     if df["emissions_mt"].isna().any():
@@ -240,6 +238,17 @@ def build_ev() -> pd.DataFrame:
     if df["country"].isna().any():
         raise ValidationError("IEA country mapping produced NaN (fail-fast)")
 
+    # year must be integer and within the pinned 2010-2024 range (ADR-003 D.3)
+    try:
+        df["year"] = df["year"].astype(int)
+    except (ValueError, TypeError) as exc:
+        raise ValidationError(
+            f"IEA year column contains non-integer values: {exc}"
+        ) from exc
+    if not df["year"].between(2010, 2024).all():
+        bad = sorted(set(df.loc[~df["year"].between(2010, 2024), "year"].tolist()))
+        raise ValidationError(f"IEA year outside 2010-2024: {bad}")
+
     expected_ev_countries = set(TARGET_COUNTRIES) - {"Singapore"}
     present = set(df["country"].unique())
     missing = expected_ev_countries - present
@@ -256,7 +265,7 @@ def build_ev() -> pd.DataFrame:
 
     out = pd.DataFrame({
         "country": df["country"].astype(str),
-        "year": df["year"].astype(int),
+        "year": df["year"],
         "parameter": df["parameter"].astype(str),
         "mode": df["mode"].astype(str),
         "powertrain": df["powertrain"].astype(str),
@@ -284,6 +293,8 @@ def build_ev() -> pd.DataFrame:
     extra = set(counts) - set(EV_COVERAGE_PIN)
     if extra:
         raise ValidationError(f"IEA unexpected (country, parameter) pairs: {sorted(extra)}")
+
+    assert sum(EV_COVERAGE_PIN.values()) == 496, "EV_COVERAGE_PIN total must be 496"
 
     return out
 
