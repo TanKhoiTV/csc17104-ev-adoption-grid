@@ -145,8 +145,8 @@ def check_input_hashes() -> None:
 
 
 def build_emissions() -> pd.DataFrame:
-    assert set(SECTOR_GROUP) == set(EDGAR_SECTORS), \
-        "SECTOR_GROUP must cover all 8 EDGAR sectors"
+    if set(SECTOR_GROUP) != set(EDGAR_SECTORS):
+        raise ValidationError("SECTOR_GROUP must cover all 8 EDGAR sectors")
     df_raw = pd.read_excel(EDGAR_PATH, sheet_name=EDGAR_SHEET, engine="openpyxl")
     if "Substance" not in df_raw.columns or "Country" not in df_raw.columns:
         raise ValidationError("EDGAR sheet missing required columns")
@@ -158,6 +158,14 @@ def build_emissions() -> pd.DataFrame:
                     ["Country", "Sector", year_col]].copy()
     df = df.rename(columns={year_col: "emissions_mt", "Country": "src_country",
                             "Sector": "sector"})
+
+    # country mapping: keep only the 8 target countries. Out-of-scope region
+    # names in the sheet are dropped by design (not an error); report the
+    # count so the exclusion is observable (ADR-003 D.4).
+    dropped = sorted(set(df["src_country"].unique()) - set(EDGAR_COUNTRY_MAP))
+    print(f"[emissions] dropped {len(dropped)} out-of-scope region names "
+          f"({len(df['src_country'].unique())} distinct in sheet, "
+          f"{len(EDGAR_COUNTRY_MAP)} target)")
 
     # country mapping (keep only target countries; fail-fast if a target is missing)
     df = df[df["src_country"].isin(EDGAR_COUNTRY_MAP)].copy()
@@ -182,11 +190,6 @@ def build_emissions() -> pd.DataFrame:
                 f"missing={sorted(missing)}, extra={sorted(extra)}"
             )
 
-    # sector_group must not contain NaN (every sector must be in SECTOR_GROUP)
-    if df["sector"].map(SECTOR_GROUP).isna().any():
-        bad = sorted(set(df.loc[df["sector"].map(SECTOR_GROUP).isna(), "sector"]))
-        raise ValidationError(f"EDGAR: unknown sectors not in SECTOR_GROUP: {bad}")
-
     if df["emissions_mt"].isna().any():
         raise ValidationError("EDGAR emissions_mt contains NaN")
 
@@ -195,9 +198,14 @@ def build_emissions() -> pd.DataFrame:
         "year": int(YEAR_EDGAR),
         "substance": "CO2",
         "sector": df["sector"].astype(str),
-        "sector_group": df["sector"].map(SECTOR_GROUP).astype(str),
+        "sector_group": df["sector"].map(SECTOR_GROUP),
         "emissions_mt": df["emissions_mt"].astype(float),
     })
+    if out["sector_group"].isna().any():
+        bad = sorted(set(out.loc[out["sector_group"].isna(), "sector"]))
+        raise ValidationError(f"EDGAR: unknown sectors not in SECTOR_GROUP: {bad}")
+
+    out["sector_group"] = out["sector_group"].astype(str)
     out = out.sort_values(["country", "year", "sector"],
                           kind="mergesort").reset_index(drop=True)
 
@@ -299,7 +307,8 @@ def build_ev() -> pd.DataFrame:
     if extra:
         raise ValidationError(f"IEA unexpected (country, parameter) pairs: {sorted(extra)}")
 
-    assert sum(EV_COVERAGE_PIN.values()) == 496, "EV_COVERAGE_PIN total must be 496"
+    if sum(EV_COVERAGE_PIN.values()) != 496:
+        raise ValidationError("EV_COVERAGE_PIN total must be 496")
 
     return out
 
