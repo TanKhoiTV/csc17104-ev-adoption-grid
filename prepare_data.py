@@ -182,6 +182,11 @@ def build_emissions() -> pd.DataFrame:
                 f"missing={sorted(missing)}, extra={sorted(extra)}"
             )
 
+    # sector_group must not contain NaN (every sector must be in SECTOR_GROUP)
+    if df["sector"].map(SECTOR_GROUP).isna().any():
+        bad = sorted(set(df.loc[df["sector"].map(SECTOR_GROUP).isna(), "sector"]))
+        raise ValidationError(f"EDGAR: unknown sectors not in SECTOR_GROUP: {bad}")
+
     if df["emissions_mt"].isna().any():
         raise ValidationError("EDGAR emissions_mt contains NaN")
 
