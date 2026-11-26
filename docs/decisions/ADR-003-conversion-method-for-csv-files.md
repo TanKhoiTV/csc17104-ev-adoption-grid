@@ -143,7 +143,7 @@
 
 - **Missing-value check.** emissions không có NaN trong `emissions_mt` (đã kiểm: 0). ev: bộ lọc D.3 hiện cho 0 NaN và 0 trùng khoá; nếu bản IEA khác làm phát sinh NaN thì chỉ log số lượng — không điền, không bỏ dòng im lặng.
 - **Output hash.** In SHA-256 của hai CSV vào log của script; không commit CSV (bị `data/*` gitignore).
-- **Fail on any mismatch.** Không "cảnh báo rồi tiếp tục".
+- **Fail on any mismatch.** Không "cảnh báo rồi tiếp tục" — trừ **đúng một ngoại lệ** đã ghi ở mục Missing-value check phía trên: NaN trong cột `value` của IEA là dữ liệu nguồn có thể có thật, nên chỉ log số lượng. Mọi gate còn lại (hash đầu vào, row count, country coverage, EV coverage, khoá trùng, sector, khoảng năm) đều hard-fail.
 
 ## Alternatives Considered
 
