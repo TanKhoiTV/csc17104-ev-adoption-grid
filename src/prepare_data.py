@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
-"""prepare_data.py -- convert the two raw .xlsx sources into tidy long CSVs.
+"""src/prepare_data.py -- convert the two raw .xlsx sources into tidy long CSVs.
 
-Entry point per ADR-003 D.1. Reads:
+Entry point per ADR-003 D.1. Run from the repo root:  python src/prepare_data.py
+
+Reads:
   data/raw/EDGAR_2026_GHG_booklet_2026.xlsx  (sheet GHG_by_sector_and_country)
   data/raw/EV Data Explorer 2025.xlsx        (sheet GEVO_EV_2025)
 
@@ -23,7 +25,7 @@ from pathlib import Path
 
 import pandas as pd
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "data"
 RAW = DATA / "raw"          # raw sources live here (see #37)
 PROCESSED = DATA / "processed"

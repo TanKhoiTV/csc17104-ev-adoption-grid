@@ -24,7 +24,7 @@
 
 ### D.1. Entry point và luồng xử lý
 
-- Một script `prepare_data.py` ở root repo là **entry point duy nhất**.
+- Một script `src/prepare_data.py` là **entry point duy nhất**, chạy từ root repo: `python src/prepare_data.py`.
 - Luồng:
     1. Đọc hash SHA-256 của hai file `.xlsx` **trong `data/raw/`**; so sánh với pin trong ADR-002 D.1/D.2. Lệch → dừng, báo lỗi.
     2. Đọc sheet với bộ lọc ở D.2/D.3.
@@ -159,7 +159,7 @@
 
 ## Consequences
 
-- **C.1. `data/processed/` bị gitignore** (`data/*`). ADR-003 + hash output là bản ghi bền vững; clone repo phải chạy `prepare_data.py` sau khi tải `.xlsx` và kiểm hash input.
+- **C.1. `data/processed/` bị gitignore** (`data/*`). ADR-003 + hash output là bản ghi bền vững; clone repo phải chạy `python src/prepare_data.py` sau khi tải `.xlsx` vào `data/raw/` và kiểm hash input.
 - **C.2. Không thay đổi env.** openpyxl 3.1.2 đã có; không cần sửa `environment.yml` cho ADR này (ADR-007 sẽ thêm statsmodels v.v.).
 - **C.3. Notebook chỉ đọc CSV.** Mọi thay đổi schema phải sửa ADR-003 trước, theo authority rule.
 - **C.4. Singapore và các năm thiếu của Việt Nam** phải được xử lý tường minh ở Q1/Q2/Q3 (loại khỏi mô hình và báo cáo rõ), không âm thầm bỏ dòng.
