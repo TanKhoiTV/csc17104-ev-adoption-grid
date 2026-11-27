@@ -108,10 +108,10 @@ sang future work (ADR-001 C.5).
 
 Đây là phần không được sửa sau khi xem kết quả.
 
-**Q1.** Với n = 7, giá trị tới hạn của Spearman ở α = 0,05 hai phía là **|ρ| ≥ 0,786** (giá trị chính xác
-0,7857; exact permutation 5.040 hoán vị, p = 0,048 — giá trị 0,714 tương ứng α = 0,10, p = 0,088, không dùng).
+**Q1.** Với n = 7, giá trị tới hạn của Spearman ở α = 0,05 hai phía là **|ρ| ≥ 0,7857**
+(exact permutation 5.040 hoán vị, p = 0,048 — giá trị 0,714 tương ứng α = 0,10, p = 0,088, không dùng).
 Vì vậy:
-- `|ρ| ≥ 0,786` và bootstrap CI không chứa 0 ⇒ **có quan hệ**, báo cáo kèm CI.
+- `|ρ| ≥ 0,7857` và bootstrap CI không chứa 0 ⇒ **có quan hệ**, báo cáo kèm CI.
 - Ngược lại ⇒ **không phân biệt được với 0**, và phải nói rõ rằng với n = 7, một quan hệ trung bình cũng không
   phân biệt được — kết quả null ở đây **không** là bằng chứng không có quan hệ.
 - Không dùng ngôn ngữ nhân quả ở Q1.
@@ -176,7 +176,7 @@ kèm ngày, lý do, và ảnh hưởng lên kết luận — trước khi báo c
 
 | Ngày | Mục | Sai lệch | Lý do | Ảnh hưởng tới kết luận |
 | --- | --- | --- | --- | --- |
-| | | | | |
+| 2026-11-26 | §5, ngưỡng Q1 | Ghi ngưỡng là `0,786` → `0,7857` (làm rõ, không đổi quy tắc) | Các giá trị ρ đạt được ở n = 7 là rời rạc: 0,785714 có p = 0,048 ≤ α = 0,05 nên là bậc thấp nhất đạt ngưỡng, còn bậc kế tiếp là 0,821429 (p = 0,0341). Ngưỡng làm tròn `0,786` sẽ loại oan đúng giá trị 0,785714. Sửa cho khớp giá trị chính xác đã ghi trong cùng câu; notebook đã dùng `SPEARMAN_CRIT = 0.7857`. | Không đổi: trị tuyệt đối ρ = 0,5714 thấp hơn cả hai ngưỡng ⇒ Q1 vẫn KHÔNG đạt. |
 
 ## 10. Tham chiếu
 
