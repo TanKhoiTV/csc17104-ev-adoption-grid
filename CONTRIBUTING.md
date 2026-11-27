@@ -36,7 +36,9 @@ Merging out of order causes cascading conflicts. If a PR must skip the queue (e.
 
 ## Environment
 
-- `conda env create -f min_ds-env.yml` -> `conda activate min_ds`
+- `conda env create -f environment.yml` -> `conda activate min_ds-env`
+- The Jupyter kernel is registered as `min_ds` (`--name min_ds`), which is the name
+  the notebooks reference — the conda env name and the kernel name differ on purpose.
 - Python 3.11.5 (floor; 3.12+ may not support `linearmodels` yet).
 - Details: ADR-007.
 

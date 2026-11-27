@@ -16,7 +16,7 @@
     - **Một entry point.** Toàn bộ logic chuyển đổi nằm trong một script; notebook chỉ đọc CSV, không tự lọc sheet.
     - **Không fabricate dữ liệu thiếu.** Việt Nam thiếu năm, Singapore không có trong file IEA — phải để trống tường minh, không điền 0.
     - **Authority rule.** `ADR > SPECIFICATION.md > notebook` (SPECIFICATION.md §1): mọi thay đổi schema phải sửa ADR này trước.
-- Tooling đã chốt ở `min_ds-env.yml`: Python 3.11.5, pandas 2.1.1, openpyxl 3.1.2. Không thêm dependency mới trong ADR này.
+- Tooling đã chốt ở `environment.yml`: Python 3.11.5, pandas 2.1.1, openpyxl 3.1.2. Không thêm dependency mới trong ADR này.
 - Nguồn đã chốt ở ADR-002 (D.1/D.2): EDGAR `GHG_by_sector_and_country`, `Substance = CO2`, năm 2025; IEA `GEVO_EV_2025`, `category = Historical`. Bộ lọc `powertrain = EV` ở ADR-002 D.2 chỉ đúng cho chuỗi share — D.3 dưới đây thay bằng bộ lọc theo parameter. Ánh xạ tên quốc gia theo ADR-002 D.6.
 - EDGAR là **bảng thưa**: trong 64 ô (8 quốc gia × 8 sector) chỉ có **61 dòng** — Singapore thiếu `Agriculture`, Đức và Mỹ thiếu `Waste`. Schema, row-count và kiểm tra coverage ở D.2/D.6 phải phản ánh đúng thực tế này.
 
@@ -24,13 +24,14 @@
 
 ### D.1. Entry point và luồng xử lý
 
-- Một script `prepare_data.py` ở root repo là **entry point duy nhất**.
+- Một script `src/prepare_data.py` là **entry point duy nhất**, chạy từ root repo: `python src/prepare_data.py`.
 - Luồng:
-    1. Đọc hash SHA-256 của hai file `.xlsx`; so sánh với pin trong ADR-002 D.1/D.2. Lệch → dừng, báo lỗi.
+    1. Đọc hash SHA-256 của hai file `.xlsx` **trong `data/raw/`**; so sánh với pin trong ADR-002 D.1/D.2. Lệch → dừng, báo lỗi.
     2. Đọc sheet với bộ lọc ở D.2/D.3.
     3. Áp dụng ánh xạ tên quốc gia (D.4).
     4. Ghi `data/processed/emissions_long.csv` và `data/processed/ev_long.csv`.
     5. In log: số dòng (tổng và theo từng parameter), số quốc gia, hash output.
+- Input đọc từ `data/raw/`, output ghi vào `data/processed/`. Cả hai bị `data/*` gitignore, nên một clone phải tự tải `.xlsx` vào `data/raw/` trước khi chạy.
 - Script idempotent: chạy lại cho cùng input cho cùng output byte-identical (sort + format cố định).
 
 ### D.2. EDGAR → `emissions_long.csv`
@@ -158,8 +159,8 @@
 
 ## Consequences
 
-- **C.1. `data/processed/` bị gitignore** (`data/*`). ADR-003 + hash output là bản ghi bền vững; clone repo phải chạy `prepare_data.py` sau khi tải `.xlsx` và kiểm hash input.
-- **C.2. Không thay đổi env.** openpyxl 3.1.2 đã có; không cần sửa `min_ds-env.yml` cho ADR này (ADR-007 sẽ thêm statsmodels v.v.).
+- **C.1. `data/processed/` bị gitignore** (`data/*`). ADR-003 + hash output là bản ghi bền vững; clone repo phải chạy `python src/prepare_data.py` sau khi tải `.xlsx` vào `data/raw/` và kiểm hash input.
+- **C.2. Không thay đổi env.** openpyxl 3.1.2 đã có; không cần sửa `environment.yml` cho ADR này (ADR-007 sẽ thêm statsmodels v.v.).
 - **C.3. Notebook chỉ đọc CSV.** Mọi thay đổi schema phải sửa ADR-003 trước, theo authority rule.
 - **C.4. Singapore và các năm thiếu của Việt Nam** phải được xử lý tường minh ở Q1/Q2/Q3 (loại khỏi mô hình và báo cáo rõ), không âm thầm bỏ dòng.
 - **C.5. Thêm `prepare_data.py` là bước tiếp theo** (ngoài phạm vi ADR này). Khi viết script, phải khớp schema và kiểm tra ở D.6; nếu lệch → sửa ADR-003 trước.

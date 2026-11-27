@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
-"""prepare_data.py -- convert the two raw .xlsx sources into tidy long CSVs.
+"""src/prepare_data.py -- convert the two raw .xlsx sources into tidy long CSVs.
 
-Entry point per ADR-003 D.1. Reads:
-  data/EDGAR_2026_GHG_booklet_2026.xlsx  (sheet GHG_by_sector_and_country)
-  data/EV Data Explorer 2025.xlsx          (sheet GEVO_EV_2025)
+Entry point per ADR-003 D.1. Run from the repo root:  python src/prepare_data.py
+
+Reads:
+  data/raw/EDGAR_2026_GHG_booklet_2026.xlsx  (sheet GHG_by_sector_and_country)
+  data/raw/EV Data Explorer 2025.xlsx        (sheet GEVO_EV_2025)
 
 Writes:
   data/processed/emissions_long.csv
@@ -17,16 +19,18 @@ ADR-003 first.
 from __future__ import annotations
 
 import hashlib
+import os
 import sys
 from pathlib import Path
 
 import pandas as pd
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "data"
+RAW = DATA / "raw"          # raw sources live here (see #37)
 PROCESSED = DATA / "processed"
-EDGAR_PATH = DATA / "EDGAR_2026_GHG_booklet_2026.xlsx"
-IEA_PATH = DATA / "EV Data Explorer 2025.xlsx"
+EDGAR_PATH = RAW / "EDGAR_2026_GHG_booklet_2026.xlsx"
+IEA_PATH = RAW / "EV Data Explorer 2025.xlsx"
 EMISSIONS_OUT = PROCESSED / "emissions_long.csv"
 EV_OUT = PROCESSED / "ev_long.csv"
 
@@ -126,10 +130,12 @@ def sha256_file(path: Path) -> str:
 
 
 def check_input_hashes() -> None:
-    if not EDGAR_PATH.is_file():
-        raise FileNotFoundError(f"Missing input file: {EDGAR_PATH}")
-    if not IEA_PATH.is_file():
-        raise FileNotFoundError(f"Missing input file: {IEA_PATH}")
+    for path in (EDGAR_PATH, IEA_PATH):
+        if not path.is_file():
+            raise FileNotFoundError(
+                f"Missing input file: {path}\n"
+                f"  Raw sources belong in {RAW} -- see the README run instructions."
+            )
     edgar_hash = sha256_file(EDGAR_PATH)
     iea_hash = sha256_file(IEA_PATH)
     if edgar_hash != EDGAR_SHA256:
@@ -148,8 +154,10 @@ def build_emissions() -> pd.DataFrame:
     if set(SECTOR_GROUP) != set(EDGAR_SECTORS):
         raise ValidationError("SECTOR_GROUP must cover all 8 EDGAR sectors")
     df_raw = pd.read_excel(EDGAR_PATH, sheet_name=EDGAR_SHEET, engine="openpyxl")
-    if "Substance" not in df_raw.columns or "Country" not in df_raw.columns:
-        raise ValidationError("EDGAR sheet missing required columns")
+    required_edgar = {"Substance", "Country", "Sector"}
+    missing_edgar = sorted(required_edgar - set(df_raw.columns))
+    if missing_edgar:
+        raise ValidationError(f"EDGAR sheet missing required columns: {missing_edgar}")
     year_col = YEAR_EDGAR if YEAR_EDGAR in df_raw.columns else str(YEAR_EDGAR)
     if year_col not in df_raw.columns:
         raise ValidationError(f"EDGAR sheet missing year column {YEAR_EDGAR}")
@@ -313,18 +321,31 @@ def build_ev() -> pd.DataFrame:
     return out
 
 
+def write_csv_atomic(frame: pd.DataFrame, path: Path) -> None:
+    """Write via a temp file then os.replace.
+
+    A partially written or stale CSV in data/processed/ would be read by the
+    notebooks as if the run had succeeded, so the swap is atomic.
+    """
+    tmp = path.with_name(path.name + ".tmp")
+    try:
+        frame.to_csv(tmp, index=False, encoding="utf-8", lineterminator="\n", na_rep="")
+        os.replace(tmp, path)
+    except BaseException:
+        tmp.unlink(missing_ok=True)
+        raise
+
+
 def main() -> int:
-    print("=== prepare_data.py ===")
+    print("=== prepare_data.py ===", flush=True)
     check_input_hashes()
 
     emissions = build_emissions()
     ev = build_ev()
 
     PROCESSED.mkdir(parents=True, exist_ok=True)
-    emissions.to_csv(EMISSIONS_OUT, index=False, encoding="utf-8",
-                     lineterminator="\n", na_rep="")
-    ev.to_csv(EV_OUT, index=False, encoding="utf-8",
-              lineterminator="\n", na_rep="")
+    write_csv_atomic(emissions, EMISSIONS_OUT)
+    write_csv_atomic(ev, EV_OUT)
 
     print(f"\n[emissions] rows={len(emissions)} countries={emissions['country'].nunique()}")
     print(f"[ev] rows={len(ev)} countries={ev['country'].nunique()}")

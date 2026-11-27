@@ -113,7 +113,7 @@ Chỉ có 2 năm dữ liệu sạc nên **không đóng góp được cho Q3**. 
 
 ### D.9. Công cụ
 
-`linearmodels` (panel FE) và **wild cluster bootstrap** cho sai lệch chuẩn — chỉ có 6 cluster nên cluster-robust thông thường không đáng tin. `min_ds-env.yml` hiện thiếu `statsmodels`, `linearmodels`, `pyfixest` — ADR-007 cần bổ sung.
+`linearmodels` (panel FE) và **wild cluster bootstrap** cho sai lệch chuẩn — chỉ có 6 cluster nên cluster-robust thông thường không đáng tin. `environment.yml` hiện thiếu `statsmodels`, `linearmodels`, `pyfixest` — ADR-007 cần bổ sung.
 
 ## Alternatives Considered
 
@@ -131,5 +131,5 @@ Chỉ có 2 năm dữ liệu sạc nên **không đóng góp được cho Q3**. 
 - **C.3. Q3 và Q3b là hai estimand, hai phán quyết.** Không được gộp kết luận.
 - **C.4. ADR-004 cần sửa một chỗ:** vai trò của Mỹ đang ghi "event study của Q3"; phải là **Q3b**.
 - **C.5. Tương quan đồng thời vẫn còn.** Fixed effect và lead/lag chỉ giảm, không loại bỏ được nhân quả ngược.
-- **C.6. Môi trường thiếu gói.** `min_ds-env.yml` cần `statsmodels`, `linearmodels`, `pyfixest` (ADR-007).
+- **C.6. Môi trường thiếu gói.** `environment.yml` cần `statsmodels`, `linearmodels`, `pyfixest` (ADR-007).
 - **C.7. `SPECIFICATION.md` kế thừa D.3 và D.5**, không viết lại.
