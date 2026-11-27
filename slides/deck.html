@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<!-- Rebuild the deck (from the repository root):
+       python slides/figures.py
+       weasyprint slides/deck.html slides.pdf
+     Figures are regenerated first and assert the published numbers, so the deck
+     cannot drift from the notebooks. Do not edit slides.pdf by hand. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>EV adoption and the shape of national CO2</title>
+<link rel="stylesheet" href="slides.css">
+</head>
+<body>
+
+<!-- ============================ 1 · TITLE ============================ -->
+<section class="slide title">
+  <p class="eyebrow" style="color:#9db8c8;">CSC17104 · Programming for Data Science · Final project</p>
+  <h1>EV adoption and the<br>shape of national CO<sub>2</sub></h1>
+  <p class="sub">What predicts how fast a country electrifies its fleet —<br>and what it means for Vietnam</p>
+  <p class="who">
+    Trần Văn Tấn Khôi · 24120010 &nbsp;—&nbsp; Q2, Q4<br>
+    Lê Thành Đạt · 24120035 &nbsp;—&nbsp; Q1, Q3
+  </p>
+  <p class="meta">
+    Vietnam National University, Ho Chi Minh City · University of Science · Faculty of Information Technology<br>
+    Fall 2026 &nbsp;·&nbsp; 15-minute presentation + 10-minute Q&amp;A
+  </p>
+</section>
+
+<!-- ============================ 2 · THE CLAIM ============================ -->
+<section class="slide">
+  <p class="eyebrow">Why this project</p>
+  <h2>EV adoption is reported as a league table</h2>
+  <p style="font-size:12pt; line-height:1.45;">A share tells you <strong>who is ahead</strong>.
+     It does not tell you <strong>what makes a country move</strong> — and it is routinely read as if it did.</p>
+  <div class="callout hot">
+    <p style="margin-bottom:1.6mm;"><strong>Three things a share cannot tell you</strong></p>
+    <ul style="margin-bottom:0;">
+      <li><strong>A share is not a magnitude.</strong> A country can double its EV share while its total market shrinks.</li>
+      <li><strong>A share is not a cause.</strong> Charging density and adoption both rise over time; that is not evidence either drives the other.</li>
+      <li><strong>A share can invert the truth.</strong> In 2024, cars pass two-wheelers on EV share in Vietnam — while roughly twelve times more electric <em>two-wheelers</em> exist.</li>
+    </ul>
+  </div>
+  <p class="small muted" style="margin-bottom:0;">So instead of ranking countries, we test four specific claims — each with a rule fixed <em>before</em> we looked at the answer.</p>
+  <p class="foot"><span class="owner">Khôi</span><span>2</span></p>
+</section>
+
+<!-- ============================ 3 · QUESTIONS ============================ -->
+<section class="slide">
+  <p class="eyebrow">The project</p>
+  <h2>Four questions, two owners</h2>
+  <table>
+    <tr><th style="width:7%">#</th><th style="width:60%">Question</th><th style="width:13%">Type</th><th style="width:12%">Owner</th></tr>
+    <tr><td><strong>Q1</strong></td><td>Does the weight of transport in national CO<sub>2</sub> predict the pace of electrification, after controlling for income?</td><td>Analysis</td><td>Đạt</td></tr>
+    <tr><td><strong>Q2</strong></td><td>Can next year's adoption rate be predicted across countries — and where does the model break?</td><td><strong>ML</strong></td><td>Khôi</td></tr>
+    <tr><td><strong>Q3</strong></td><td>Does public charging density increase adoption, or merely accompany it?</td><td>Analysis</td><td>Đạt</td></tr>
+    <tr><td><strong>Q4</strong></td><td>Is Vietnam's transition a two-wheeler story, and how much CO<sub>2</sub> does it avoid?</td><td>Analysis</td><td>Khôi</td></tr>
+  </table>
+  <div class="callout">
+    <p style="margin-bottom:0;">Each question carries a <strong>hypothesis with a direction</strong> and a <strong>decision rule</strong>, both written down before the analysis. Two of those rules later failed — and both failures are reported as results.</p>
+  </div>
+  <p class="foot"><span class="owner">Khôi</span><span>3</span></p>
+</section>
+
+<!-- ============================ 4 · PRE-REGISTRATION (spine) ============================ -->
+<section class="slide">
+  <p class="eyebrow">How you should judge this talk</p>
+  <h2>What we fixed before we looked</h2>
+  <table class="compact">
+    <tr><th style="width:7%">#</th><th style="width:56%">Rule fixed in advance</th><th style="width:19%">Outcome</th><th style="width:18%">Verdict</th></tr>
+    <tr><td>Q1</td><td>Spearman |ρ| ≥ 0.7857 <em>and</em> bootstrap 95% CI excluding 0, n = 7</td><td class="num">ρ = −0.5714</td><td><span class="pill no">NOT MET</span></td></tr>
+    <tr><td>Q2</td><td>Test RMSE ≤ 6.2423 pp — at least 1.0 pp better than persistence (7.2423 pp)</td><td class="num">best 9.2175</td><td><span class="pill no">NOT MET</span></td></tr>
+    <tr><td>Q3</td><td>Lagged charging CI excludes 0 <em>conditional on</em> the lead test being insignificant</td><td class="num">lead p = 0.0001</td><td><span class="pill und">UNDETERMINED</span></td></tr>
+    <tr><td>Q4</td><td>Report a band over a pre-declared assumption set — never a point estimate</td><td class="num">0.42–0.86 Mt</td><td><span class="pill yes">REPORTED AS BAND</span></td></tr>
+  </table>
+  <div class="callout">
+    <p style="margin-bottom:0;"><strong>Two of four rules failed.</strong> A rule chosen after seeing the data is not a test — so when ours failed, we kept the number and changed the conclusion, not the threshold.</p>
+  </div>
+  <p class="foot"><span class="owner">both</span><span>4</span></p>
+</section>
+
+<!-- ============================ 5 · DATA ============================ -->
+<section class="slide">
+  <p class="eyebrow">Data</p>
+  <h2>Three public sources, all traceable</h2>
+  <table class="compact">
+    <tr><th style="width:32%">Source</th><th style="width:34%">What we use</th><th style="width:16%">Size</th><th style="width:18%">Licence</th></tr>
+    <tr><td><strong>EDGAR 2026</strong> (EU JRC)</td><td>National CO<sub>2</sub> by 8 sectors, no LULUCF</td><td>4,858 × 60</td><td>IEA-EDGAR CO<sub>2</sub> part: <strong>CC BY-NC-ND</strong></td></tr>
+    <tr><td><strong>IEA Global EV Outlook 2025</strong></td><td>EV sales share, stock share, public chargers</td><td>16,436 × 9</td><td>CC BY 4.0</td></tr>
+    <tr><td><strong>World Bank</strong> Open Data API</td><td>GDP per capita, population, income group</td><td>6–7 × 15 yrs</td><td>CC BY 4.0</td></tr>
+  </table>
+  <div class="two">
+    <div>
+      <p class="small" style="margin-bottom:1.2mm;"><strong>Nothing derived is committed.</strong></p>
+      <p class="small muted" style="margin-bottom:0;">The CO<sub>2</sub> series is NC-ND: academic use, no redistribution of modified versions. So the repo ships the <em>pipeline</em>, not the data — both inputs are SHA-256 pinned and the pipeline refuses to run on a mismatch.</p>
+    </div>
+    <div>
+      <p class="small" style="margin-bottom:1.2mm;"><strong>Two sampling facts shape every answer.</strong></p>
+      <p class="small muted" style="margin-bottom:0;">IEA covers 62 countries for sales share but only <strong>7 of our 8</strong> — Singapore has zero rows. And EDGAR's one <code>Transport</code> sector includes aviation and shipping, so it is a coarse proxy for road transport.</p>
+    </div>
+  </div>
+  <p class="foot"><span class="owner">Đạt</span><span>5</span></p>
+</section>
+
+<!-- ============================ 6 · Q1 METHOD ============================ -->
+<section class="slide divider">
+  <p class="eyebrow">Question 1 · Đạt</p>
+  <h1>Does transport weight predict adoption pace?</h1>
+  <p class="sub">A cross-country rank test, seven countries, one pre-registered threshold.</p>
+  <div class="two" style="margin-top:6mm;">
+    <div>
+      <p class="small" style="margin-bottom:1mm;"><strong>Outcome</strong></p>
+      <p class="small muted">EV sales share, cars, 2018 → 2024, in percentage points.</p>
+      <p class="small" style="margin-bottom:1mm;"><strong>Predictor</strong></p>
+      <p class="small muted">Transport share of national CO<sub>2</sub>, EDGAR 2025.</p>
+    </div>
+    <div>
+      <p class="small" style="margin-bottom:1mm;"><strong>Test</strong></p>
+      <p class="small muted">Spearman rank correlation — monotone, robust to the two outliers you will see.</p>
+      <p class="small" style="margin-bottom:1mm;"><strong>Control</strong></p>
+      <p class="small muted">Log GDP per capita, 2018 (OLS).</p>
+    </div>
+  </div>
+  <p class="foot"><span class="owner">Đạt</span><span>6</span></p>
+</section>
+
+<!-- ============================ 7 · Q1 RESULT ============================ -->
+<section class="slide">
+  <p class="eyebrow">Question 1 · result</p>
+  <h2>The association is negative — and indistinguishable from zero</h2>
+  <div class="two wide-right">
+    <div>
+      <img class="fig" src="figures/f1_q1_scatter.png" alt="Transport share vs adoption pace, seven countries">
+      <p class="figure-note">n = 7. China sits bottom-right, New Zealand top-left — the two points that set the sign.</p>
+    </div>
+    <div>
+      <div class="kv">
+        <div><div class="lab">Spearman ρ</div><div class="val bad">−0.5714</div></div>
+        <div><div class="lab">Exact p</div><div class="val">0.2000</div></div>
+      </div>
+      <p class="small" style="margin-bottom:2mm;"><strong>Bootstrap 95% CI</strong> [−1.0000, 0.3725] — contains zero.</p>
+      <p class="small" style="margin-bottom:2.5mm;"><strong>Threshold</strong> |ρ| ≥ 0.7857. We are well short.</p>
+      <div class="callout hot" style="margin-bottom:2mm;">
+        <p style="margin-bottom:1.2mm;"><strong>H1 predicted the opposite sign.</strong></p>
+        <p class="small" style="margin-bottom:0;">China: transport is only <strong>8.3%</strong> of CO<sub>2</sub> yet adoption rose <strong>+43.3 pp</strong>.
+           New Zealand: transport is <strong>52.7%</strong> and adoption rose <strong>+6.1 pp</strong>.</p>
+      </div>
+      <p class="small muted" style="margin-bottom:0;">With n = 7 this is <em>not</em> evidence of no relationship — it is the absence of evidence for this one.</p>
+    </div>
+  </div>
+  <p class="foot"><span class="owner">Đạt</span><span>7</span></p>
+</section>
+
+<!-- ============================ 8 · Q1 HOW WE KNOW ============================ -->
+<section class="slide">
+  <p class="eyebrow">Question 1 · how we know it is right</p>
+  <h2>Three independent ways of trying to break it</h2>
+  <table class="compact">
+    <tr><th style="width:26%">Check</th><th style="width:44%">What it rules out</th><th style="width:30%">Result</th></tr>
+    <tr><td><strong>Exact permutation test</strong><br>5,040 permutations</td><td>An asymptotic p-value that assumes normality with n = 7</td><td class="num">p = 0.2000</td></tr>
+    <tr><td><strong>Income control</strong><br>OLS with log GDP</td><td>Income driving both transport weight and adoption</td><td class="num">coef −0.46, CI [−1.62, 0.70], p = 0.33 — pattern does not survive</td></tr>
+    <tr><td><strong>Robustness rows</strong><br>4 alternative specifications</td><td>A result that only exists for one choice of year or series</td><td class="num">EDGAR 2024 ρ = −0.571 (identical); 2&amp;3 wheelers ρ = −0.750</td></tr>
+  </table>
+  <div class="callout">
+    <p style="margin-bottom:0;">The full robustness table is in the appendix. All four rows keep the sign and none reaches the threshold — so the null is not an artefact of one window or one vehicle series.</p>
+  </div>
+  <p class="foot"><span class="owner">Đạt</span><span>8</span></p>
+</section>
+
+<!-- ============================ 9 · Q2 SETUP ============================ -->
+<section class="slide divider">
+  <p class="eyebrow">Question 2 · Khôi</p>
+  <h1>Can next year's adoption be predicted?</h1>
+  <p class="sub">A time-based split, a persistence baseline, and two models chosen to tell us <em>why</em> they fail.</p>
+  <table class="compact" style="margin-top:5mm;">
+    <tr><th style="width:24%">Split</th><th style="width:38%">Origins → targets</th><th style="width:38%">Rows</th></tr>
+    <tr><td>Train</td><td>2011–2019 → 2012–2020</td><td class="num">54 observations, 6 countries</td></tr>
+    <tr><td>Test</td><td>2020–2023 → 2021–2024</td><td class="num">24 observations, 6 countries</td></tr>
+  </table>
+  <div class="two">
+    <div><p class="small muted" style="margin-bottom:0;"><strong>Baseline.</strong> Persistence — next year equals this year. Test RMSE <strong>7.2423 pp</strong>, so the bar is <strong>6.2423 pp</strong>. Chargers are missing for 16 training rows and imputed with a train-only median.</p></div>
+    <div><p class="small muted" style="margin-bottom:0;"><strong>Models.</strong> Ridge, because the two lag features are nearly collinear. HistGradientBoosting, to see whether the relationship is non-linear. Four time folds, split on <em>origins</em> with an assertion that no fold trains on the future.</p></div>
+  </div>
+  <p class="foot"><span class="owner">Khôi</span><span>9</span></p>
+</section>
+
+<!-- ============================ 10 · Q2 RESULT ============================ -->
+<section class="slide">
+  <p class="eyebrow">Question 2 · result</p>
+  <h2>Every model lost to a one-line baseline</h2>
+  <div class="two wide-right">
+    <div>
+      <img class="fig" src="figures/f2_q2_rmse.png" alt="Test RMSE by model against the persistence baseline">
+      <p class="figure-note">Lower is better. Persistence is the solid line; the dashed line is the pre-registered bar.</p>
+    </div>
+    <div>
+      <p class="small" style="margin-bottom:2.5mm;"><strong>The failure is the finding.</strong> Cross-validated RMSE is about <strong>1.3 pp</strong> for all four models. On test it is <strong>9.2–13.7 pp</strong>.</p>
+      <div class="callout hot" style="margin-bottom:2.5mm;">
+        <p style="margin-bottom:1.2mm;"><strong>A rank reversal.</strong></p>
+        <p class="small" style="margin-bottom:0;">The honest, no-peeking rule — pick the primary model on cross-validation alone — selects the model that does <em>worst</em> on test. The folds live in the low-share 2012–2020 window; the test window is the high-growth regime.</p>
+      </div>
+      <p class="small" style="margin-bottom:1.2mm;"><strong>Country identity adds nothing.</strong> Dummies bought Ridge 0.30 pp and the booster 0.008 pp — the missing information is <em>acceleration</em>, not country.</p>
+      <p class="small muted" style="margin-bottom:0;"><strong>Errors grow with the target:</strong> 1.2 pp under 5 pp of share, 30.7 pp above 30 pp. China's bias is +27 pp — systematic under-prediction of explosive growth.</p>
+    </div>
+  </div>
+  <p class="foot"><span class="owner">Khôi</span><span>10</span></p>
+</section>
+
+<!-- ============================ 11 · Q3 ============================ -->
+<section class="slide">
+  <p class="eyebrow">Question 3 · Đạt</p>
+  <h2>Both directions are equally positive — so we cannot choose</h2>
+  <img class="fig" src="figures/f3_q3_coefficients.png" alt="Lead and lag coefficients with intervals">
+  <div class="two" style="margin-top:1mm;">
+    <div>
+      <p class="small" style="margin-bottom:0;"><strong>Design.</strong> Country and year fixed effects; lag and lead estimated as separate regressions, as ADR-006 fixes; wild cluster bootstrap because six clusters is too few for clustered standard errors.</p>
+    </div>
+    <div>
+      <p class="small" style="margin-bottom:0;"><strong>Verdict.</strong> The lead is significant (p = 0.0001), so reverse causality or anticipation cannot be excluded. Under the pre-registered table that is <strong>undetermined</strong> — a valid, reportable outcome, not a failure.</p>
+    </div>
+  </div>
+  <p class="foot"><span class="owner">Đạt</span><span>11</span></p>
+</section>
+
+<!-- ============================ 12 · Q4 FACTORS ============================ -->
+<section class="slide">
+  <p class="eyebrow">Question 4 · Khôi</p>
+  <h2>Four factors — and we label which ones are data</h2>
+  <table class="compact">
+    <tr><th style="width:34%">Factor</th><th style="width:20%">Value</th><th style="width:14%">Kind</th><th style="width:32%">Basis</th></tr>
+    <tr><td>Transport CO<sub>2</sub>, Vietnam 2025</td><td class="num">50.81 Mt</td><td><span class="pill yes">DATA</span></td><td>EDGAR 2026</td></tr>
+    <tr><td>Two-wheeler EV stock share, 2024</td><td class="num">2.6%</td><td><span class="pill yes">DATA</span></td><td>IEA GEVO 2025</td></tr>
+    <tr><td>Two-wheelers' share of transport</td><td class="num">50 / 65 / 80%</td><td><span class="pill und">ASSUMPTION</span></td><td>road = 100% is a stated ceiling</td></tr>
+    <tr><td>Intensity factor (EV vs ICE)</td><td class="num">0.64 / 0.73 / 0.82</td><td><span class="pill und">ASSUMPTION</span></td><td>grid 0.30 / 0.45 / 0.60 kgCO<sub>2</sub>/kWh</td></tr>
+  </table>
+  <div class="callout">
+    <p style="margin-bottom:0;"><strong>The grid assumption dominates.</strong> Across the full 81-combination envelope the intensity factor spans 1.8× and the two-wheeler share spans 1.6× — so the band is wider from <em>our grid assumption</em> than from our mix assumption. That is why the band, not the point, is the answer.</p>
+  </div>
+  <p class="foot"><span class="owner">Khôi</span><span>12</span></p>
+</section>
+
+<!-- ============================ 13 · Q4 RESULT ============================ -->
+<section class="slide">
+  <p class="eyebrow">Question 4 · result</p>
+  <h2>Small today — and the ceiling is the interesting number</h2>
+  <div class="two wide-right">
+    <div>
+      <img class="fig" src="figures/f4_q4_band.png" alt="Avoided CO2 today versus a fully electrified fleet">
+      <p class="figure-note">Log scale. Today's segment against the same segment fully electrified.</p>
+    </div>
+    <div>
+      <div class="kv">
+        <div><div class="lab">2024 band</div><div class="val">0.42–0.86 Mt</div><div class="stat">0.109–0.223% of national CO<sub>2</sub></div></div>
+      </div>
+      <p class="small" style="margin-bottom:2.5mm;"><strong>The reframe.</strong> A fully electrified two-wheeler fleet would avoid <strong>16.2–33.3 Mt</strong> — 4.2–8.6% of national CO<sub>2</sub>. Today's segment delivers about <strong>a fortieth</strong> of that.</p>
+      <div class="callout hot" style="margin-bottom:0;">
+        <p style="margin-bottom:1.2mm;"><strong>The metric says the opposite of the arithmetic.</strong></p>
+        <p class="small" style="margin-bottom:0;">In 2024 cars overtake two-wheelers on EV <em>share</em> (17.0% vs 9.4%). But at a 22:1 motorbike-to-car fleet ratio, a 2.6% two-wheeler stock share implies roughly <strong>twelve times more electric two-wheelers than electric cars</strong>.</p>
+      </div>
+    </div>
+  </div>
+  <p class="foot"><span class="owner">Khôi</span><span>13</span></p>
+</section>
+
+<!-- ============================ 14 · CLOSE ============================ -->
+<section class="slide">
+  <p class="eyebrow">Close</p>
+  <h2>What we would do next — and what we would not change</h2>
+  <div class="two">
+    <div>
+      <p class="small" style="margin-bottom:1.6mm;"><strong>Not change: the pre-registration.</strong></p>
+      <p class="small muted" style="margin-bottom:3mm;">Two rules failed and we reported them as failures. A null result with a fixed threshold is evidence; the same null with a threshold moved afterwards is not.</p>
+      <p class="small" style="margin-bottom:1.6mm;"><strong>Next: three things we could not get.</strong></p>
+      <ul class="small muted" style="margin-bottom:0;">
+        <li>A road / aviation / shipping split of transport CO<sub>2</sub>, to turn Q4's ceiling into a genuine range.</li>
+        <li>Current Vietnamese registration counts by segment — the 22:1 ratio is from 2015.</li>
+        <li>Grid intensity from published scenarios instead of assumed values, as a robustness axis.</li>
+      </ul>
+    </div>
+    <div>
+      <div class="callout" style="margin-top:0;">
+        <p style="margin-bottom:1.2mm;"><strong>What we would say to a policy audience</strong></p>
+        <p class="small" style="margin-bottom:0;">Not <em>"two-wheelers are 0.16% of national emissions"</em> — true, and useless. But: <em>the segment is at about 2.5% of its own potential, and the barrier is not technology.</em></p>
+      </div>
+      <p style="font-size:13pt; margin-top:6mm;"><strong>Thank you — questions welcome.</strong></p>
+      <p class="small muted" style="margin-bottom:0;">Decision records: ADR-001 … ADR-008 in <code>docs/decisions/</code>.<br>Frozen rules: <code>SPECIFICATION.md</code>.</p>
+    </div>
+  </div>
+  <p class="foot"><span class="owner">both</span><span>14</span></p>
+</section>
+
+<!-- ============================ APPENDIX ============================ -->
+<section class="slide appendix">
+  <p class="eyebrow">Appendix · not presented</p>
+  <h2>A1 · Q1 full robustness table</h2>
+  <table class="compact">
+    <tr><th style="width:34%">Specification</th><th style="width:7%">n</th><th style="width:14%">ρ</th><th style="width:24%">Bootstrap 95% CI</th><th style="width:21%">Meets |ρ| ≥ 0.7857?</th></tr>
+    <tr><td>Main: cars, EDGAR 2025, 2018→2024</td><td class="num">7</td><td class="num">−0.5714</td><td class="num">[−1.0000, 0.3725]</td><td>No</td></tr>
+    <tr><td>EDGAR 2024 instead of 2025</td><td class="num">7</td><td class="num">−0.5714</td><td class="num">identical</td><td>No</td></tr>
+    <tr><td>2&amp;3 wheelers as the series</td><td class="num">7</td><td class="num">−0.7500</td><td class="num">[−1.0000, 0.0442]</td><td>No</td></tr>
+    <tr><td>Cars, 2015→2024 window</td><td class="num">6</td><td class="num">−0.3714</td><td class="num">[−1.0000, 0.8065]</td><td>No</td></tr>
+    <tr><td>2&amp;3 wheelers, 2015→2024 window</td><td class="num">6</td><td class="num">−0.6571</td><td class="num">[−1.0000, 0.5000]</td><td>No</td></tr>
+  </table>
+  <p class="small muted" style="margin-bottom:0;">The most favourable row is the two-wheeler series at ρ = −0.750 — still below the threshold, and still the wrong sign for H1. Exact permutation p for that row is 0.0663.</p>
+  <p class="foot"><span class="owner">Đạt</span><span>A1</span></p>
+</section>
+
+<section class="slide appendix">
+  <p class="eyebrow">Appendix · not presented</p>
+  <h2>A2 · Q2 full results and error decomposition</h2>
+  <div class="two">
+    <div>
+      <table class="compact">
+        <tr><th>Model</th><th class="num">RMSE</th><th class="num">MAE</th></tr>
+        <tr><td>persistence</td><td class="num">7.2423</td><td class="num">5.4971</td></tr>
+        <tr><td>pooled / ridge</td><td class="num">9.5196</td><td class="num">6.3690</td></tr>
+        <tr><td>dummied / ridge</td><td class="num">9.2175</td><td class="num">6.0923</td></tr>
+        <tr><td>pooled / hist_gb</td><td class="num">13.6825</td><td class="num">8.9132</td></tr>
+        <tr><td>dummied / hist_gb</td><td class="num">13.6748</td><td class="num">8.9059</td></tr>
+      </table>
+      <p class="tiny muted">Selected primary model is chosen on train-only CV, not on test — hence hist_gb, the worse test performer.</p>
+    </div>
+    <div>
+      <table class="compact">
+        <tr><th>Error cut</th><th class="num">Mean abs. error (pp)</th></tr>
+        <tr><td>Target under 5 pp</td><td class="num">1.219</td></tr>
+        <tr><td>Target 5–15 pp</td><td class="num">5.725</td></tr>
+        <tr><td>Target 15–30 pp</td><td class="num">11.255</td></tr>
+        <tr><td>Target above 30 pp</td><td class="num">30.685</td></tr>
+        <tr><td>2021–22 regime</td><td class="num">6.632</td></tr>
+        <tr><td>2023–24 regime</td><td class="num">11.194</td></tr>
+      </table>
+      <p class="tiny muted">By country: China 27.0 (bias +27.0), Germany 11.0, New Zealand 5.5, Thailand 4.3, US 4.2, Japan 1.4.</p>
+    </div>
+  </div>
+  <p class="foot"><span class="owner">Khôi</span><span>A2</span></p>
+</section>
+
+<section class="slide appendix">
+  <p class="eyebrow">Appendix · not presented</p>
+  <h2>A3 · Q3 estimates and the decision table</h2>
+  <div class="two">
+    <div>
+      <table class="compact">
+        <tr><th>Term</th><th class="num">Coef</th><th class="num">Clustered 95% CI</th><th class="num">p</th></tr>
+        <tr><td>lag charging density</td><td class="num">21.513</td><td class="num">[14.323, 28.703]</td><td class="num">0.0000</td></tr>
+        <tr><td>lag — wild bootstrap</td><td class="num">21.47</td><td class="num">[15.2544, 27.7714]</td><td class="num">—</td></tr>
+        <tr><td>lead charging density</td><td class="num">13.051</td><td class="num">[7.1292, 18.973]</td><td class="num">0.0001</td></tr>
+      </table>
+      <p class="tiny muted">64 observations, 6 clusters, country + year fixed effects, log GDP control. 70 cells before the 1-year lag.</p>
+    </div>
+    <div>
+      <table class="compact">
+        <tr><th style="width:30%">lead</th><th style="width:32%">lag CI excludes 0?</th><th style="width:38%">Verdict</th></tr>
+        <tr><td>not significant</td><td>yes</td><td>contributes</td></tr>
+        <tr><td>not significant</td><td>no</td><td>undetermined</td></tr>
+        <tr><td><strong>significant</strong></td><td>—</td><td><strong>undetermined</strong> ← ours</td></tr>
+      </table>
+      <p class="tiny muted">Between-R² is −37.6 and overall −21.3: with country and year effects in, the model fits country means worse than a constant. That is itself evidence the remaining variation is a common time trend.</p>
+    </div>
+  </div>
+  <p class="foot"><span class="owner">Đạt</span><span>A3</span></p>
+</section>
+
+<section class="slide appendix">
+  <p class="eyebrow">Appendix · not presented</p>
+  <h2>A4 · Q4 assumption grid and the joint envelope</h2>
+  <table class="compact">
+    <tr><th style="width:22%">ICE L/100km</th><th style="width:26%">EV Wh/km</th><th class="num">grid 0.60</th><th class="num">grid 0.45</th><th class="num">grid 0.30</th></tr>
+    <tr><td>2.0</td><td>40</td><td class="num">0.481</td><td class="num">0.610</td><td class="num">0.740</td></tr>
+    <tr><td>2.5</td><td>35</td><td class="num">0.636</td><td class="num"><strong>0.727</strong></td><td class="num">0.818</td></tr>
+    <tr><td>3.0</td><td>30</td><td class="num">0.740</td><td class="num">0.805</td><td class="num">0.870</td></tr>
+  </table>
+  <table class="compact">
+    <tr><th style="width:34%">Scope</th><th class="num" style="width:22%">Min</th><th class="num" style="width:22%">Median</th><th class="num" style="width:22%">Max</th></tr>
+    <tr><td>Headline band (grid only, 9 combinations)</td><td class="num">0.4204 Mt</td><td class="num">0.6245 Mt</td><td class="num">0.8647 Mt</td></tr>
+    <tr><td>Joint envelope (81 combinations)</td><td class="num">0.3174 Mt</td><td class="num">0.6078 Mt</td><td class="num">0.9196 Mt</td></tr>
+    <tr><td>100% electrified fleet (ceiling)</td><td class="num">16.17 Mt</td><td class="num">—</td><td class="num">33.26 Mt</td></tr>
+  </table>
+  <p class="small muted" style="margin-bottom:0;">Bold factor is the headline mid-point. The joint envelope is reported as robustness only; the headline varies grid intensity alone, because that is the assumption the band is most sensitive to.</p>
+  <p class="foot"><span class="owner">Khôi</span><span>A4</span></p>
+</section>
+
+<section class="slide appendix">
+  <p class="eyebrow">Appendix · not presented</p>
+  <h2>A5 · Reproducibility</h2>
+  <div class="two">
+    <div>
+      <p class="small" style="margin-bottom:1.6mm;"><strong>Pipeline</strong></p>
+      <p class="tiny" style="font-family:Consolas,monospace; line-height:1.6; margin-bottom:3mm;">
+        conda env create -f environment.yml<br>
+        conda activate min_ds-env<br>
+        python src/prepare_data.py<br>
+        jupyter lab &nbsp;# 01 → 02 → 03
+      </p>
+      <p class="tiny muted" style="margin-bottom:0;">Inputs are SHA-256 pinned and the pipeline fails closed on a mismatch. Outputs are written atomically and hashed.</p>
+    </div>
+    <div>
+      <p class="small" style="margin-bottom:1.6mm;"><strong>Verified hashes</strong></p>
+      <table class="compact">
+        <tr><td class="tiny">EDGAR input</td><td class="tiny"><code>BB77A0DA…F00F88C</code></td></tr>
+        <tr><td class="tiny">IEA input</td><td class="tiny"><code>309C6342…AB35699D</code></td></tr>
+        <tr><td class="tiny">emissions_long.csv</td><td class="tiny"><code>D742524F…159A91BD</code></td></tr>
+        <tr><td class="tiny">ev_long.csv</td><td class="tiny"><code>7F8A6885…75F3D7A72</code></td></tr>
+      </table>
+      <p class="tiny muted" style="margin-bottom:0;">61 and 496 tidy rows. Reruns are byte-identical.</p>
+    </div>
+  </div>
+  <div class="callout" style="margin-top:2mm;">
+    <p class="small" style="margin-bottom:0;">Every figure in this deck is regenerated by <code>python slides/figures.py</code>, which <em>asserts</em> the numbers against the notebooks and fails if they drift.</p>
+  </div>
+  <p class="foot"><span class="owner">both</span><span>A5</span></p>
+</section>
+
+</body>
+</html>
